@@ -15,7 +15,7 @@ import java.net.URL;
  */
 public class Connector extends AsyncTask<String, String, String> {
 
-    private static final String ourURL ="https://api.backendless.com/v1/data/cds";
+    private static final String ourURL ="https://api.backendless.com/v1/data/Game";
     @Override
     protected String doInBackground(String... params) {
         try {
@@ -25,9 +25,9 @@ public class Connector extends AsyncTask<String, String, String> {
                     (HttpURLConnection) url.openConnection();
 
             connection.addRequestProperty("application-id",
-                    "F9615D38-AE50-A389-FF5E-8BD658331900");
+                    "94B456C3-9A44-D044-FF87-A1D0AA589D00");
             connection.addRequestProperty("secret-key",
-                    "A4082182-4C7A-E9E8-FFF4-2D69B1025700");
+                    "CDA1E692-BF29-7396-FF7F-0E699E669000");
 
             BufferedReader reader = new BufferedReader(
                     new InputStreamReader(connection.getInputStream()));
