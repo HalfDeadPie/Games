@@ -1,5 +1,6 @@
 package com.example.simon.gamesshop;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,17 +25,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
+    public void goToActivity2 (View view){
+        Intent intent = new Intent(this, Login.class);
+        startActivity(intent);
+    }
 
     public void getAll(View view) {
         String out = "";
         AsyncTask<String, String, String> con = new Connector();
-        Log.i("test", "testovanie");
+        //Log.i("test", "testovanie");
         con.execute("");
-        Log.i("test", "testovanie");
+        //Log.i("test", "testovanie");
         try {
-            Log.i("test", "testovanie");
+            //Log.i("test", "testovanie");
             out = (String) con.get();
-            Log.i("test", "testovanie");
+            //Log.i("test", "testovanie");
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {

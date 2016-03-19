@@ -35,7 +35,9 @@ public class Connector extends AsyncTask<String, String, String> {
                 json.append(tmp).append("\n");
             }
             reader.close();
+            System.out.println(json.toString());
             return json.toString();
+
 
         } catch (Exception e1) {
             e1.printStackTrace();
