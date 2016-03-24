@@ -1,5 +1,9 @@
 package com.example.simon.gamesshop;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,22 +18,39 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
     }
 
-    public void testLogin(View view){
-        String ok_name = "Jaro";
-        String ok_password = "Simon";
-        TextView name = (TextView) findViewById(R.id.login_name);
-        TextView password = (TextView) findViewById(R.id.login_passwd);
-        TextView error = (TextView) findViewById(R.id.login_error);
+    public void Logged (){
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
 
-        if((name.getText().toString().equals("Jaro")) && (password.getText().toString().equals("Simon"))){
-            error.setText("Prihlasenie je uspesne!");
-            //System.out.println("Som tu1!");
-        }else{
-            assert error != null;
-            System.out.println("Som tu2!");
-            error.setText("Nespravne meno alebo heslo!");
+    public void testLogin(View view) {
+        String RightLogin = "Jaro";
+        String RightPassword = "Simon";
+        TextView Login = (TextView) findViewById(R.id.login_name);
+        TextView Password = (TextView) findViewById(R.id.login_passwd);
+        TextView Error = (TextView) findViewById(R.id.login_error);
+
+        if ((Login.getText().toString().equals("")) && (Password.getText().toString().equals(""))) {
+            Log.v("Login", "Login sucessful");
+            ProgressDialog Loading = ProgressDialog.show(Login.this, "", "Loading. Please wait...", true);
+            Logged();
+        } else {
+            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(this);
+
+            dlgAlert.setMessage("Wrong password or username");
+            dlgAlert.setTitle("Error!");
+            dlgAlert.setPositiveButton("OK", null);
+            dlgAlert.setCancelable(true);
+            dlgAlert.create().show();
+
+            dlgAlert.setPositiveButton("Ok",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    });
+
+
         }
-
-
     }
 }

@@ -22,7 +22,12 @@
         android:layout_toRightOf="@+id/login_error"
         android:layout_toEndOf="@+id/login_error"
         android:textSize="30dp"
-        android:textColor="#ffffff" />
+        android:textColor="#ffffff"
+        android:textColorHighlight="#00eaff"
+        android:textColorHint="#ffffff"
+        android:hint="Login"
+        android:textIsSelectable="false"
+        android:singleLine="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -50,7 +55,11 @@
         android:layout_toRightOf="@+id/login_error"
         android:layout_toEndOf="@+id/login_error"
         android:textSize="30dp"
-        android:textColor="#ffffff" />
+        android:textColor="#ffffff"
+        android:hint="Password"
+        android:textColorHint="#ffffff"
+        android:textColorHighlight="#00e6ff"
+        android:singleLine="true" />
 
     <Button
         android:layout_width="wrap_content"
