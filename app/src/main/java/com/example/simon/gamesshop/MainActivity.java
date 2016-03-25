@@ -1,6 +1,10 @@
 package com.example.simon.gamesshop;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,15 +12,22 @@ import android.test.SingleLaunchActivityTestCase;
 import android.util.Log;
 import android.view.TextureView;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -28,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         GetAll();
     }
-    
+
     public void GetAll() {
         String Json = "";
         ArrayList<Game> GameList = new ArrayList<Game>();
@@ -42,11 +53,23 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+
+        List<HashMap<String, Object>> fillMaps = new ArrayList<HashMap<String, Object>>();
         AllListBuilder(Json, GameList);
+        String[] from = new String[] { "image","name", "count"};
+        int[] to = new int[] { R.id.cover_image, R.id.name, R.id.count};
+        ListView viewGL = (ListView)findViewById(R.id.viewGL);
+
+
         for(int i=0;i<GameList.size();i++){
-            Log.v("GameList","Name"+i+": "+ GameList.get(i).getName());
+            HashMap<String, Object> map = new HashMap<String, Object>();
+            map.put("name", GameList.get(i).getName()); // This will be shown in R.id.title
+            map.put("image", "blabla"); // And this in R.id.description
+            map.put("count", GameList.get(i).getCount()); // And this in R.id.description
+            fillMaps.add(map);
         }
-        TextView outText = (TextView) findViewById(R.id.text);
+        SimpleAdapter adapter = new SimpleAdapter(this, fillMaps, R.layout.row, from, to);
+        viewGL.setAdapter(adapter);
     }
 
     //Z json stringu zadaného ako argument vráti zoznam hier triedy Game zadaný ako argument
