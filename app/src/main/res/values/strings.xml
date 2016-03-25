@@ -15,4 +15,10 @@
         completions."
     </string>
     <string name="Password">Password</string>
+
+    <string name="title_activity_main_list">MainList</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+
+    <string name="title_activity_detail_window">Detail_window</string>
 </resources>
