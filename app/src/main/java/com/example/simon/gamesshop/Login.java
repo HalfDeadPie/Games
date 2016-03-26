@@ -25,11 +25,9 @@ public class Login extends AppCompatActivity {
     }
 
     public void testLogin(View view) {
-        String RightLogin = "Jaro";
-        String RightPassword = "Simon";
+
         TextView Login = (TextView) findViewById(R.id.login_name);
         TextView Password = (TextView) findViewById(R.id.login_passwd);
-        TextView Error = (TextView) findViewById(R.id.login_error);
 
         if ((Login.getText().toString().equals("")) && (Password.getText().toString().equals(""))) {
             Log.v("Login", "Login sucessful");

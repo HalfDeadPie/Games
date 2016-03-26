@@ -24,8 +24,11 @@
         </activity>
 
         <activity android:name=".MainActivity">
-        </activity>
 
+        </activity>
+        <activity android:name=".detail">
+
+        </activity>
     </application>
 
 </manifest>
