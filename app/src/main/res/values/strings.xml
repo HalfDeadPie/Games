@@ -3,6 +3,11 @@
     <string name="title_activity_login">Prihlasenie</string>
 
     <!-- Strings related to login -->
+<<<<<<< HEAD
+    <string name="username">Username</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+=======
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password (optional)</string>
     <string name="action_sign_in">Sign in or register</string>
@@ -21,4 +26,5 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
 
     <string name="title_activity_detail_window">Detail_window</string>
+>>>>>>> bda5792a77b15ba6c3b0172e5078365c3013e588
 </resources>

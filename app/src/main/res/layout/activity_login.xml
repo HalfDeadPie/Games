@@ -25,14 +25,14 @@
         android:textColor="#ffffff"
         android:textColorHighlight="#00eaff"
         android:textColorHint="#ffffff"
-        android:hint="Login"
+        android:hint="@string/login"
         android:textIsSelectable="false"
         android:singleLine="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Username"
+        android:text="@string/username"
         android:id="@+id/textView"
         android:layout_above="@+id/login_name"
         android:layout_alignParentLeft="true"
@@ -56,7 +56,7 @@
         android:layout_toEndOf="@+id/login_error"
         android:textSize="30dp"
         android:textColor="#ffffff"
-        android:hint="Password"
+        android:hint="@string/password"
         android:textColorHint="#ffffff"
         android:textColorHighlight="#00e6ff"
         android:singleLine="true" />
@@ -64,7 +64,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="LOGIN"
+        android:text="@string/login"
         android:id="@+id/button2"
         android:onClick="testLogin"
         android:layout_below="@+id/login_error"
