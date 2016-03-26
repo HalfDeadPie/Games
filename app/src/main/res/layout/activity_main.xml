@@ -22,7 +22,7 @@
         android:layout_alignParentTop="true"
         android:fillViewport="true"
         android:focusable="false">
-    </ScrollView>
+
 
     <ListView
         android:layout_width="wrap_content"
@@ -33,5 +33,5 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignTop="@+id/scrollView" />
-
+    </ScrollView>
 </RelativeLayout>

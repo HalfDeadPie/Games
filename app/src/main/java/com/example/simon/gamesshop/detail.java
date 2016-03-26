@@ -1,5 +1,6 @@
 package com.example.simon.gamesshop;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -35,10 +36,10 @@ public class detail extends AppCompatActivity {
     @Override
     public void onBackPressed()
     {
+        ProgressDialog Loading = ProgressDialog.show(detail.this, "", "Loading. Please wait...", true);
         super.onBackPressed();
         startActivity(new Intent(this, MainActivity.class));
         finish();
-
     }
 
     public void GetDetail(String ID) {
@@ -65,18 +66,6 @@ public class detail extends AppCompatActivity {
         setDetail(g);
     }
 
-    private Drawable LoadImageFromWebOperations(String url)
-    {
-        try{
-            InputStream is = (InputStream) new URL(url).getContent();
-            Drawable d = Drawable.createFromStream(is, "src name");
-            return d;
-        }catch (Exception e) {
-            System.out.println("Exc="+e);
-            return null;
-        }
-    }
-
     protected void setDetail(Game g){
 
         TextView detail_description = (TextView) findViewById(R.id.detail_description);
@@ -97,8 +86,8 @@ public class detail extends AppCompatActivity {
         detail_name.setText(g.getName());
         detail_image.setImageBitmap(getImage(g.getImage()));
         detail_pegi.setText(g.getPegi());
-        detail_rating.setText(Integer.toString(g.getRating()));
-        detail_price.setText(Integer.toString(g.getPrice()));
+        detail_rating.setText(Integer.toString(g.getRating())+"%");
+        detail_price.setText(Integer.toString(g.getPrice())+" €");
         detail_description.setText(g.getDescription());
         detail_count.setText(Integer.toString(g.getCount()));
         detail_date.setText(g.getReleaseDate());

@@ -1,5 +1,6 @@
 package com.example.simon.gamesshop;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -41,31 +43,23 @@ public class MainActivity extends AppCompatActivity {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-
-
-        List<HashMap<String, Object>> fillMaps = new ArrayList<HashMap<String, Object>>();
-        AllListBuilder(Json, GameList);
-        String[] from = new String[] { "image","name", "count", "uid"};
-        int[] to = new int[] { R.id.cover_image, R.id.name, R.id.count,R.id.uid};
         ListView viewGL = (ListView)findViewById(R.id.viewGL);
+        AllListBuilder(Json, GameList);
 
 
-        for(int i=0;i<GameList.size();i++){
+        String[] Names = new String[GameList.size()];
+        int[] Counts = new int[GameList.size()];
+        String[] ImageURLs = new String[GameList.size()];
+        String[] UIDs = new String[GameList.size()];
 
-            Bitmap b = getImage(GameList.get(i).getImage());
-            // b = objekt typu bitmap s nacitanym suborom
-
-            HashMap<String, Object> map = new HashMap<String, Object>();
-            map.put("name", GameList.get(i).getName()); // This will be shown in R.id.title
-            // do cover_image poslem bitmap ale obrazok sa nenastavi..
-            map.put("image", b); // And this in R.id.description
-            map.put("count", GameList.get(i).getCount()); // And this in R.id.description
-            map.put("uid", GameList.get(i).getUID()); // And this in R.id.description
-            fillMaps.add(map);
-
+        for(int i=0; i<GameList.size() ;i++){
+            Names[i] = GameList.get(i).getName();
+            Counts[i] = GameList.get(i).getCount();
+            ImageURLs[i]= GameList.get(i).getImage();
+            UIDs[i] = GameList.get(i).getUID();
         }
-        SimpleAdapter adapter = new SimpleAdapter(this, fillMaps, R.layout.row, from, to);
-        viewGL.setAdapter(adapter);
+
+        viewGL.setAdapter(new CustomAdapter(this,Names,Counts,ImageURLs,UIDs));
     }
 
     //Z json stringu zadaného ako argument vráti zoznam hier triedy Game zadaný ako argument
@@ -114,24 +108,11 @@ public class MainActivity extends AppCompatActivity {
         String ID = textView.getText().toString();                  // z dietata nacitame UID
         // spustenie novej aktivity s UID
 
-
+        ProgressDialog Loading = ProgressDialog.show(MainActivity.this, "", "Loading. Please wait...", true);
         Intent intent = new Intent(this, detail.class);
         intent.putExtra("UID", ID);//Put your id to your next Intent
         startActivity(intent);
         finish();
     }
 
-    protected Bitmap getImage(String link){
-        Bitmap b = null;
-        AsyncTask<String, String, Bitmap> img = new Image();
-        img.execute(link);
-        try {
-            return b = (Bitmap) img.get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 }
