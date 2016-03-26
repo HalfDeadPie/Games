@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         String Json = "";
         ArrayList<Game> GameList = new ArrayList<Game>();
         AsyncTask<String, String, String> con = new Connector();
-        con.execute("");
+        con.execute("GETALL");
         try {
             Json = (String) con.get();
         } catch (InterruptedException e) {
