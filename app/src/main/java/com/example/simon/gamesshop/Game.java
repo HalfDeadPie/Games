@@ -32,6 +32,14 @@ public class Game
 
     private String video;
 
+    private String uid;
+
+    private String releaseDate;
+
+    public String getUID(){ return uid;}
+
+    public void setUID(String UID){ this.uid=UID;}
+
     public int getGenre ()
     {
         return genre;
@@ -152,5 +160,15 @@ public class Game
     {
         this.video = video;
     }
+
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
+    public String getReleaseDate ()
+    {
+        return releaseDate;
+    }
+
 }
 

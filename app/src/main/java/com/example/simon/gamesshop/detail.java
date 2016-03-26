@@ -1,5 +1,6 @@
 package com.example.simon.gamesshop;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
@@ -22,18 +23,29 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 public class detail extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-         GetDetail("267FBCE3-25CF-DC4E-FF67-B9311AE18E00");
+
+        Intent myIntent = getIntent();
+        String gameId = myIntent.getStringExtra("UID");
+        GetDetail(gameId);
     }
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
+
+    }
+
     public void GetDetail(String ID) {
-        ID = "267FBCE3-25CF-DC4E-FF67-B9311AE18E00";
         String Json = "";
         ArrayList<Game> GameList = new ArrayList<Game>();
         AsyncTask<String, String, String> con = new Connector();
+        System.out.println(ID);
         con.execute("GETDETAIL", ID);
         try {
             Json = (String) con.get();
@@ -53,14 +65,6 @@ public class detail extends AppCompatActivity {
         setDetail(g);
     }
 
-    public void setData(Game h) throws IOException {
-       // http://3.bp.blogspot.com/-JhISDA9aj1Q/UTECr1GzirI/AAAAAAAAC2o/5qmvWZiCMRQ/s1600/Twitter.png
-        TextView detail_description = (TextView) findViewById(R.id.detail_description);
-        detail_description.setText(h.getDescription());
-        ImageView icon = (ImageView) findViewById(R.id.detail_image);
-        Drawable drawable = LoadImageFromWebOperations("http://3.bp.blogspot.com/-JhISDA9aj1Q/UTECr1GzirI/AAAAAAAAC2o/5qmvWZiCMRQ/s1600/Twitter.png");
-        icon.setImageDrawable(drawable);
-    }
     private Drawable LoadImageFromWebOperations(String url)
     {
         try{
@@ -74,10 +78,11 @@ public class detail extends AppCompatActivity {
     }
 
     protected void setDetail(Game g){
+
         TextView detail_description = (TextView) findViewById(R.id.detail_description);
         TextView detail_name = (TextView) findViewById(R.id.detail_name);
         ImageView detail_image = (ImageView) findViewById(R.id.detail_image);
-        ImageView detail_pegi = (ImageView) findViewById(R.id.detail_pegi);
+        TextView detail_pegi = (TextView) findViewById(R.id.detail_pegi);
         TextView detail_rating = (TextView) findViewById(R.id.detail_rating);
         TextView detail_price = (TextView) findViewById(R.id.detail_price);
         TextView detail_date = (TextView) findViewById(R.id.detail_date);
@@ -87,18 +92,34 @@ public class detail extends AppCompatActivity {
         TextView detail_language = (TextView) findViewById(R.id.detail_language);
         TextView detail_platform = (TextView) findViewById(R.id.detail_platform);
 
+
+
         detail_name.setText(g.getName());
-        //detail_image.
-        //detail_pegi.setText(g.getName());
-        //detail_rating.setText(g.getRating());
-        //detail_price.setText(g.getPrice());
+        detail_image.setImageBitmap(getImage(g.getImage()));
+        detail_pegi.setText(g.getPegi());
+        detail_rating.setText(Integer.toString(g.getRating()));
+        detail_price.setText(Integer.toString(g.getPrice()));
         detail_description.setText(g.getDescription());
-        //detail_count.setText(g.getCount());
-        //detail_date.setText(g.getd);
+        detail_count.setText(Integer.toString(g.getCount()));
+        detail_date.setText(g.getReleaseDate());
         detail_producer.setText(g.getProducer());
-        //detail_genre.setText(g.getGenre());
+        detail_genre.setText(Integer.toString(g.getGenre()));
         detail_language.setText(g.getLanguage());
-        //detail_platform.setText(g.getPlatform());
+        detail_platform.setText(Integer.toString(g.getPlatform()));
+    }
+
+    protected Bitmap getImage(String link){
+        Bitmap b = null;
+        AsyncTask<String, String, Bitmap> img = new Image();
+        img.execute(link);
+        try {
+            return b = (Bitmap) img.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public Game ListParser(JSONObject JG, Game SG){
@@ -115,6 +136,7 @@ public class detail extends AppCompatActivity {
             SG.setProducer(JG.getString("producer"));
             SG.setRating(JG.getInt("rating"));
             SG.setVideo(JG.getString("video"));
+            SG.setReleaseDate(JG.getString("release_date"));
         } catch (JSONException e) {
             Log.d("JSON", "Chyba pri parsovaní!");
         }
