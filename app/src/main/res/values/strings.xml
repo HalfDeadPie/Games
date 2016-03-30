@@ -24,5 +24,6 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
 
     <string name="title_activity_detail_window">Detail_window</string>
->>>>>>> bda5792a77b15ba6c3b0172e5078365c3013e588
+    <string name="title_activity_riadok">riadok</string>
+    >>>>>>> bda5792a77b15ba6c3b0172e5078365c3013e588
 </resources>
