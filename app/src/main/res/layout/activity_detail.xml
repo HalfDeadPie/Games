@@ -56,7 +56,8 @@
                 android:background="#000000"
                 android:minHeight="220px"
                 android:minWidth="220px"
-                android:foregroundGravity="top|center_horizontal" />
+                android:foregroundGravity="top|center_horizontal"
+                android:scaleType="fitStart"/>/>
 
             <TextView
                 android:id="@+id/textView2"
