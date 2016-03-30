@@ -22,8 +22,11 @@
                 android:layout_height="fill_parent"
                 android:id="@+id/cover_image"
                 android:layout_weight="0.15"
-                android:background="#FFFFFF"
-                android:onClick="toDetail" />
+                android:background="#000000"
+                android:onClick="toDetail"
+                android:layout_gravity="top"
+                android:foregroundGravity="top"
+                android:scaleType="fitEnd"/>
 
             <LinearLayout
                 android:orientation="vertical"

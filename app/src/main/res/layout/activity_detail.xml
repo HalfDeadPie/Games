@@ -3,12 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#000000"
     android:paddingBottom="16dp"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:paddingTop="16dp"
-    tools:context=".detail"
-    android:background="#000000">
+    tools:context=".detail">
 
     <ScrollView
         android:id="@+id/scrollView"
@@ -22,242 +22,251 @@
         android:layout_alignParentTop="true"
         android:fillViewport="true"
         android:focusable="false">
+
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignTop="@+id/scrollView"
+            android:clickable="true"
+            android:drawSelectorOnTop="false">
+
+            <TextView
+                android:id="@+id/detail_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:minHeight="80px"
+                android:textSize="16dp" />
+
+            <ImageView
+                android:id="@+id/detail_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/detail_price"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/detail_name"
+                android:background="#000000"
+                android:minHeight="220px"
+                android:minWidth="220px"
+                android:foregroundGravity="top|center_horizontal" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/detail_name"
+                android:layout_toEndOf="@+id/detail_image"
+                android:layout_toRightOf="@+id/detail_image"
+                android:text="Release:" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textView2"
+                android:layout_toEndOf="@+id/detail_image"
+                android:layout_toRightOf="@+id/detail_image"
+                android:text="Developer:" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textView3"
+                android:layout_toEndOf="@+id/detail_image"
+                android:layout_toRightOf="@+id/detail_image"
+                android:text="Genre:" />
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textView4"
+                android:layout_toEndOf="@+id/detail_image"
+                android:layout_toRightOf="@+id/detail_image"
+                android:text="Language:" />
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textView5"
+                android:layout_toEndOf="@+id/detail_image"
+                android:layout_toRightOf="@+id/detail_image"
+                android:text="Platform:" />
+
+            <TextView
+                android:id="@+id/detail_pegi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/textView6"
+                android:layout_alignStart="@+id/textView6"
+                android:layout_below="@+id/textView6"
+                android:layout_toLeftOf="@+id/detail_language"
+                android:layout_toStartOf="@+id/detail_language"
+                android:gravity="center"
+                android:minHeight="50px"
+                android:minWidth="50px"
+                android:text="18"
+                android:textAlignment="center" />
+
+            <TextView
+                android:id="@+id/detail_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/detail_pegi"
+                android:layout_alignEnd="@+id/detail_description"
+                android:layout_alignRight="@+id/detail_description"
+                android:layout_below="@+id/textView6"
+                android:layout_toRightOf="@+id/detail_pegi"
+                android:gravity="center"
+                android:text="94%" />
+
+            <TextView
+                android:id="@+id/detail_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/detail_rating"
+                android:layout_alignRight="@+id/detail_rating"
+                android:layout_below="@+id/detail_pegi"
+                android:layout_toRightOf="@+id/detail_image"
+                android:gravity="center"
+                android:text="29"
+                android:textColor="#00fff2"
+                android:textIsSelectable="false"
+                android:textSize="25dp" />
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/detail_image"
+                android:text="Description:" />
+
+            <TextView
+                android:id="@+id/detail_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/textView7"
+                android:minHeight="150px"
+                android:text="description" />
+
+            <TextView
+                android:id="@+id/detail_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/button4"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignRight="@+id/button4"
+                android:layout_below="@+id/detail_description"
+                android:background="#ffffff"
+                android:text="123"
+                android:textAlignment="center"
+                android:textColor="#000000"
+                android:textSize="35dp" />
+
+            <Button
+                android:id="@+id/button3"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/detail_count"
+                android:background="#00d9ff"
+                android:text="BUY" />
+
+            <Button
+                android:id="@+id/button4"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/detail_count"
+                android:layout_toEndOf="@+id/button3"
+                android:layout_toRightOf="@+id/button3"
+                android:background="#b70000"
+                android:text="SELL" />
+
+            <Button
+                android:id="@+id/button5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DELETE"
+                android:textColor="#ff0000"
+                android:layout_alignBaseline="@+id/button4"
+                android:layout_alignBottom="@+id/button4"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
+
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/button3"
+                android:text="Trailer:" />
+
+            <TextView
+                android:id="@+id/detail_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/detail_name"
+                android:layout_toRightOf="@+id/textView2" />
+
+            <TextView
+                android:id="@+id/detail_producer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@+id/textView3"
+                android:layout_toRightOf="@+id/textView3" />
+
+            <TextView
+                android:id="@+id/detail_genre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/textView3"
+                android:layout_toRightOf="@+id/textView4" />
+
+            <TextView
+                android:id="@+id/detail_language"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/detail_genre"
+                android:layout_toRightOf="@+id/textView3" />
+
+            <TextView
+                android:id="@+id/detail_platform"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@+id/textView6"
+                android:layout_toRightOf="@+id/textView6" />
+        </RelativeLayout>
     </ScrollView>
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/scrollView"
-        android:clickable="true"
-        android:drawSelectorOnTop="false"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/detail_name"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:textSize="16dp"
-            android:minHeight="80px"/>
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/detail_image"
-            android:layout_below="@+id/detail_name"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:minHeight="220px"
-            android:minWidth="220px"
-            android:layout_alignBottom="@+id/detail_pegi"
-            android:layout_alignRight="@+id/button4"
-            android:layout_alignEnd="@+id/button4" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Release:"
-            android:id="@+id/textView2"
-            android:layout_below="@+id/detail_name"
-            android:layout_toRightOf="@+id/detail_image"
-            android:layout_toEndOf="@+id/detail_image" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Developer:"
-            android:id="@+id/textView3"
-            android:layout_below="@+id/textView2"
-            android:layout_toRightOf="@+id/detail_image"
-            android:layout_toEndOf="@+id/detail_image" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Genre:"
-            android:id="@+id/textView4"
-            android:layout_below="@+id/textView3"
-            android:layout_toRightOf="@+id/detail_image"
-            android:layout_toEndOf="@+id/detail_image" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Language:"
-            android:id="@+id/textView5"
-            android:layout_below="@+id/textView4"
-            android:layout_toRightOf="@+id/detail_image"
-            android:layout_toEndOf="@+id/detail_image" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Platform:"
-            android:id="@+id/textView6"
-            android:layout_below="@+id/textView5"
-            android:layout_toRightOf="@+id/detail_image"
-            android:layout_toEndOf="@+id/detail_image" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/detail_pegi"
-            android:layout_below="@+id/textView6"
-            android:minHeight="50px"
-            android:minWidth="50px"
-            android:layout_alignLeft="@+id/textView6"
-            android:layout_alignStart="@+id/textView6"
-            android:layout_toLeftOf="@+id/detail_language"
-            android:layout_toStartOf="@+id/detail_language"
-            android:textAlignment="center" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/detail_rating"
-            android:layout_below="@+id/textView6"
-            android:layout_toRightOf="@+id/detail_pegi"
-            android:layout_alignBottom="@+id/detail_pegi"
-            android:layout_alignRight="@+id/detail_description"
-            android:layout_alignEnd="@+id/detail_description" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/detail_price"
-            android:layout_below="@+id/detail_pegi"
-            android:layout_toRightOf="@+id/detail_image"
-            android:textColor="#00fff2"
-            android:layout_alignRight="@+id/detail_rating"
-            android:layout_alignEnd="@+id/detail_rating"
-            android:textIsSelectable="false"
-            android:textSize="20px"
-            android:layout_alignBottom="@+id/textView7" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Description:"
-            android:id="@+id/textView7"
-            android:layout_below="@+id/detail_image"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="description"
-            android:id="@+id/detail_description"
-            android:layout_below="@+id/textView7"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:minHeight="150px" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="123"
-            android:id="@+id/detail_count"
-            android:layout_below="@+id/detail_description"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignRight="@+id/button4"
-            android:layout_alignEnd="@+id/button4"
-            android:textAlignment="center" />
-
-        <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="BUY"
-            android:id="@+id/button3"
-            android:layout_below="@+id/detail_count"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:background="#00ff33" />
-
-        <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="SELL"
-            android:id="@+id/button4"
-            android:layout_below="@+id/detail_count"
-            android:layout_toRightOf="@+id/button3"
-            android:layout_toEndOf="@+id/button3"
-            android:background="#ff0000" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="DELETE"
-            android:id="@+id/button5"
-            android:layout_alignTop="@+id/button4"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:textColor="#ff0000" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Trailer:"
-            android:id="@+id/textView8"
-            android:layout_below="@+id/button3"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/detail_date"
-            android:layout_below="@+id/detail_name"
-            android:layout_toRightOf="@+id/textView2"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/detail_producer"
-            android:layout_alignTop="@+id/textView3"
-            android:layout_toRightOf="@+id/textView3"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/detail_genre"
-            android:layout_below="@+id/textView3"
-            android:layout_toRightOf="@+id/textView4"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/detail_language"
-            android:layout_below="@+id/detail_genre"
-            android:layout_toRightOf="@+id/textView3"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/detail_platform"
-            android:layout_alignTop="@+id/textView6"
-            android:layout_toRightOf="@+id/textView6"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
-    </RelativeLayout>
-
 
 </RelativeLayout>
