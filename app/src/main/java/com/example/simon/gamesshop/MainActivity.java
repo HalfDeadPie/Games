@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -56,10 +57,12 @@ public class MainActivity extends AppCompatActivity {
             Names[i] = GameList.get(i).getName();
             Counts[i] = GameList.get(i).getCount();
             ImageURLs[i]= GameList.get(i).getImage();
-            UIDs[i] = GameList.get(i).getUID();
+            String ID = GameList.get(i).getUID();
+            System.out.println("Nastavuje hre[" + i + "] ID: " +ID);
+            UIDs[i] = ID;
         }
 
-        viewGL.setAdapter(new CustomAdapter(this,Names,Counts,ImageURLs,UIDs));
+        viewGL.setAdapter(new CustomAdapter(this, Names, Counts, ImageURLs, UIDs));
     }
 
     //Z json stringu zadaného ako argument vráti zoznam hier triedy Game zadaný ako argument
@@ -103,9 +106,37 @@ public class MainActivity extends AppCompatActivity {
     // po kliknuti n obrazok/ nazov hry sa pusti kod na zobrazenie detailu konkretnej hry
     public void toDetail(View view){
         // ziska UID zaznamu a spusti novu aktivitu s tymto UID
+
         ViewGroup row = (ViewGroup) view.getParent();               // rodic
-        TextView textView = (TextView) row.findViewById(R.id.uid);  // dieta (skryty textview obsahujuci UID)
+        System.out.println(row);
+        LinearLayout lay = (LinearLayout) row.findViewById(R.id.layout);
+        System.out.println(lay);
+        TextView textView = (TextView) lay.findViewById(R.id.uid);  // dieta (skryty textview obsahujuci UID)
+        System.out.println(textView);
         String ID = textView.getText().toString();                  // z dietata nacitame UID
+
+
+        // spustenie novej aktivity s UID
+
+        ProgressDialog Loading = ProgressDialog.show(MainActivity.this, "", "Loading. Please wait...", true);
+        Intent intent = new Intent(this, detail.class);
+        intent.putExtra("UID", ID);//Put your id to your next Intent
+        startActivity(intent);
+        finish();
+    }
+    public void toDetailFromName(View view){
+        // ziska UID zaznamu a spusti novu aktivitu s tymto UID
+
+        ViewGroup row = (ViewGroup) view.getParent();               // rodic
+        System.out.println("Prvy rodic"+row);
+        ViewGroup row2 = (ViewGroup) row.getParent();
+        LinearLayout lay = (LinearLayout) row2.findViewById(R.id.layout);
+        System.out.println(lay);
+        TextView textView = (TextView) lay.findViewById(R.id.uid);  // dieta (skryty textview obsahujuci UID)
+        System.out.println(textView);
+        String ID = textView.getText().toString();                  // z dietata nacitame UID
+
+
         // spustenie novej aktivity s UID
 
         ProgressDialog Loading = ProgressDialog.show(MainActivity.this, "", "Loading. Please wait...", true);

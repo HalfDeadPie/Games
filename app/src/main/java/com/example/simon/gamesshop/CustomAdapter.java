@@ -33,8 +33,7 @@ public class CustomAdapter extends BaseAdapter{
         this.UID = UID;
         this.Count = Count;
 
-        inflater = ( LayoutInflater )context.
-                getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        inflater = ( LayoutInflater )context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
     @Override
     public int getCount() {
@@ -58,6 +57,7 @@ public class CustomAdapter extends BaseAdapter{
     {
         TextView NTV;
         TextView CTV;
+        TextView ID;
         ImageView img;
     }
     @Override
@@ -69,10 +69,13 @@ public class CustomAdapter extends BaseAdapter{
         holder.NTV=(TextView) rowView.findViewById(R.id.name);
         holder.img=(ImageView) rowView.findViewById(R.id.cover_image);
         holder.CTV=(TextView) rowView.findViewById(R.id.count);
+        holder.ID=(TextView) rowView.findViewById(R.id.uid);
 
         holder.NTV.setText(Name[position]);
         holder.CTV.setText(Integer.toString(Count[position]));
         holder.img.setImageBitmap(getImage(ImageURL[position]));
+        holder.ID.setText(UID[position]);
+        /*
         rowView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,6 +83,7 @@ public class CustomAdapter extends BaseAdapter{
                 Toast.makeText(context, "You Clicked " + Name[position], Toast.LENGTH_LONG).show();
             }
         });
+        */
         return rowView;
     }
 
