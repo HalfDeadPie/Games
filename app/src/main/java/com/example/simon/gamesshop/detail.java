@@ -36,7 +36,7 @@ public class detail extends AppCompatActivity {
     @Override
     public void onBackPressed()
     {
-        ProgressDialog Loading = ProgressDialog.show(detail.this, "", "Loading. Please wait...", true);
+        //ProgressDialog Loading = ProgressDialog.show(detail.this, "", "Loading. Please wait...", true);
         super.onBackPressed();
         startActivity(new Intent(this, MainActivity.class));
         finish();

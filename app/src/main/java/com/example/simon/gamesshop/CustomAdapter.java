@@ -75,20 +75,11 @@ public class CustomAdapter extends BaseAdapter{
         holder.CTV.setText(Integer.toString(Count[position]));
         holder.img.setImageBitmap(getImage(ImageURL[position]));
         holder.ID.setText(UID[position]);
-        /*
-        rowView.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                Toast.makeText(context, "You Clicked " + Name[position], Toast.LENGTH_LONG).show();
-            }
-        });
-        */
         return rowView;
     }
 
 
-    protected Bitmap getImage(String link){
+    protected Bitmap getImage (String link){
         Bitmap b = null;
         AsyncTask<String, String, Bitmap> img = new Image();
         img.execute(link);

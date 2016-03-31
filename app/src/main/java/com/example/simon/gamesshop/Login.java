@@ -31,7 +31,7 @@ public class Login extends AppCompatActivity {
 
         if ((Login.getText().toString().equals("")) && (Password.getText().toString().equals(""))) {
             Log.v("Login", "Login sucessful");
-            ProgressDialog Loading = ProgressDialog.show(Login.this, "", "Loading. Please wait...", true);
+            //ProgressDialog Loading = ProgressDialog.show(Login.this, "", "Loading. Please wait...", true);
             Logged();
         } else {
             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(this);

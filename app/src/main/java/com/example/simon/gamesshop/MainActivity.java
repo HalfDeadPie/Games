@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
 
         // spustenie novej aktivity s UID
 
-        ProgressDialog Loading = ProgressDialog.show(MainActivity.this, "", "Loading. Please wait...", true);
+        //ProgressDialog Loading = ProgressDialog.show(MainActivity.this, "", "Loading. Please wait...", true);
         Intent intent = new Intent(this, detail.class);
         intent.putExtra("UID", ID);//Put your id to your next Intent
         startActivity(intent);

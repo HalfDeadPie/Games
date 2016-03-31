@@ -29,73 +29,64 @@ public class Connector extends AsyncTask<String, String, String> {
     protected String doInBackground(String... params) {
         System.out.println("Vykonavam background "+params[0]);
         if(params[0].equals("GETALL")){
-            return all();
+            try {
+
+                URL url = new URL(ourURL);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+                connection.addRequestProperty("application-id", "94B456C3-9A44-D044-FF87-A1D0AA589D00");
+                connection.addRequestProperty("secret-key", "CDA1E692-BF29-7396-FF7F-0E699E669000");
+
+
+                BufferedReader reader = new BufferedReader( new InputStreamReader(connection.getInputStream()));
+                StringBuffer json = new StringBuffer(1024);
+                String tmp = "";
+                while ((tmp = reader.readLine()) != null) {
+                    json.append(tmp).append("\n");
+                }
+                reader.close();
+                System.out.println(json.toString());
+                return json.toString();
+
+            } catch (Exception e1) {
+                e1.printStackTrace();
+                return null;
+            }
         }else if(params[0].equals("POST")){
 
         }else if(params[0].equals("DELETE")){
 
         }else if(params[0].equals("GETDETAIL")){
             System.out.println(params[1].toString());
-            return GetDetail(params[1].toString());
+            try {
+                URL url = new URL(ourURL+"/"+params[1]);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+                System.out.println(url);
+                connection.addRequestProperty("application-id", "94B456C3-9A44-D044-FF87-A1D0AA589D00");
+                connection.addRequestProperty("secret-key", "CDA1E692-BF29-7396-FF7F-0E699E669000");
+                connection.addRequestProperty("application-type", "REST");
+                //connection.addRequestProperty("objectId", ID);
+                BufferedReader reader;
+                reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                StringBuilder json = new StringBuilder(1024);
+                String tmp = "";
+                while ((tmp = reader.readLine()) != null) {
+                    json.append(tmp).append("\n");
+                }
+                reader.close();
+                System.out.println("Server vratil odpoved : " + json.toString());
+                return json.toString();
+
+            } catch (Exception e1) {
+                e1.printStackTrace();
+                return null;
+            }
         }
 
         return null;
     }
-    // get 1 konkretny zaznam s ID = Stringu ID
-    // zaznam ulozi do g
 
-
-    protected String all(){
-        try {
-
-            URL url = new URL(ourURL);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
-            connection.addRequestProperty("application-id", "94B456C3-9A44-D044-FF87-A1D0AA589D00");
-            connection.addRequestProperty("secret-key", "CDA1E692-BF29-7396-FF7F-0E699E669000");
-
-
-            BufferedReader reader = new BufferedReader( new InputStreamReader(connection.getInputStream()));
-            StringBuffer json = new StringBuffer(1024);
-            String tmp = "";
-            while ((tmp = reader.readLine()) != null) {
-                json.append(tmp).append("\n");
-            }
-            reader.close();
-            System.out.println(json.toString());
-            return json.toString();
-
-        } catch (Exception e1) {
-            e1.printStackTrace();
-            return null;
-        }
-    }
-    protected String GetDetail(String ID){
-        try {
-            URL url = new URL(ourURL+"/"+ID);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
-            System.out.println(url);
-            connection.addRequestProperty("application-id", "94B456C3-9A44-D044-FF87-A1D0AA589D00");
-            connection.addRequestProperty("secret-key", "CDA1E692-BF29-7396-FF7F-0E699E669000");
-            connection.addRequestProperty("application-type", "REST");
-            //connection.addRequestProperty("objectId", ID);
-            BufferedReader reader;
-            reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            StringBuilder json = new StringBuilder(1024);
-            String tmp = "";
-            while ((tmp = reader.readLine()) != null) {
-                json.append(tmp).append("\n");
-            }
-            reader.close();
-            System.out.println("Server vratil odpoved : " + json.toString());
-            return json.toString();
-
-        } catch (Exception e1) {
-            e1.printStackTrace();
-            return null;
-        }
-    }
 
     public static String httpGet(String ID) throws IOException {
         ID = "267FBCE3-25CF-DC4E-FF67-B9311AE18E00";

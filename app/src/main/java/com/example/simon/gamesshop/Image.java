@@ -17,14 +17,8 @@ public class Image extends AsyncTask<String, String, Bitmap> {
 
     @Override
     protected Bitmap doInBackground(String... params) {
-        return download(params[0]);
-    }
-
-
-
-    public Bitmap download(String imageUrl){
         try {
-            Bitmap bitmap = BitmapFactory.decodeStream((InputStream) new URL(imageUrl).getContent());
+            Bitmap bitmap = BitmapFactory.decodeStream((InputStream) new URL(params[0]).getContent());
             return bitmap;
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -33,5 +27,7 @@ public class Image extends AsyncTask<String, String, Bitmap> {
         }
         System.out.println("ERROR : Vraciam null - stahovanie obrazku sa nepodarilo");
         return null;
+
     }
+
 }
