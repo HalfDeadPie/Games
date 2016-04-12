@@ -90,9 +90,6 @@ public class MainActivity extends AppCompatActivity {
         System.out.println(textView);
         String ID = textView.getText().toString();                  // z dietata nacitame UID
 
-
-        // spustenie novej aktivity s UID
-
         //ProgressDialog Loading = ProgressDialog.show(MainActivity.this, "", "Loading. Please wait...", true);
         Intent intent = new Intent(this, detail.class);
         intent.putExtra("UID", ID);//Put your id to your next Intent
@@ -101,7 +98,6 @@ public class MainActivity extends AppCompatActivity {
     }
     public void toDetailFromName(View view){
         // ziska UID zaznamu a spusti novu aktivitu s tymto UID
-
         ViewGroup row = (ViewGroup) view.getParent();               // rodic
         System.out.println("Prvy rodic"+row);
         ViewGroup row2 = (ViewGroup) row.getParent();
@@ -110,7 +106,6 @@ public class MainActivity extends AppCompatActivity {
         TextView textView = (TextView) lay.findViewById(R.id.uid);  // dieta (skryty textview obsahujuci UID)
         System.out.println(textView);
         String ID = textView.getText().toString();                  // z dietata nacitame UID
-
 
         // spustenie novej aktivity s UID
 

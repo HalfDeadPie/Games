@@ -36,33 +36,27 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
 
     private AppCompatActivity activity;
     private ProgressDialog Loading;
-
     public Connector(AppCompatActivity activity) {
         this.activity = activity;
     }
-
     private static final String ourURL ="https://api.backendless.com/v1/data/Game";
 
     @Override
-    protected void onPreExecute() {
+    protected void onPreExecute() {//pred vykonaním doInBackground načíta a zobrazí loader
         super.onPreExecute();
         Loading = ProgressDialog.show(activity, "", "Loading. Please wait...", true);
     }
 
     @Override
-    protected ArrayList<Game> doInBackground(String... params) {
+    protected ArrayList<Game> doInBackground(String... params) {//vykonavanie v pozadí
         ArrayList<Game> GameList = new ArrayList<Game>();
-       // System.out.println("Vykonavam background "+params[0]);
+        //1. FUNKCIA VYTVORÍ ZOZNAM ZO VŠETKÝCH HIER
         if(params[0].equals("GETALL")){
             try {
-
                 URL url = new URL(ourURL);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
                 connection.addRequestProperty("application-id", "94B456C3-9A44-D044-FF87-A1D0AA589D00");
                 connection.addRequestProperty("secret-key", "CDA1E692-BF29-7396-FF7F-0E699E669000");
-
-
                 BufferedReader reader = new BufferedReader( new InputStreamReader(connection.getInputStream()));
                 StringBuffer json = new StringBuffer(1024);
                 String tmp = "";
@@ -70,23 +64,18 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
                     json.append(tmp).append("\n");
                 }
                 reader.close();
-               // System.out.println(json.toString());
-
-
-                AllListBuilder(json.toString(), GameList);
-
-
-
-                return GameList;
-
+                AllListBuilder(json.toString(), GameList);//vytvorenie zoznamu hier z JSONu
+                return GameList;//vrátenie kompletného zoznamu hier s potrebnými atribútmi
             } catch (Exception e1) {
                 e1.printStackTrace();
                 return null;
             }
+            //2. FUNKCIA NA PRIDANIE ZÁZNAMU O HRE
         }else if(params[0].equals("POST")){
 
+            //3. FUNKCIA NA ZMAZANIE ZÁZNAMU O HRE
         }else if(params[0].equals("DELETE")){
-
+            //4. FUNKCIA, KTORA ZOBRAZÍ DETAILNÝ ZÁZNAM O HRE
         }else if(params[0].equals("GETDETAIL")){
             System.out.println(params[1].toString());
             try {

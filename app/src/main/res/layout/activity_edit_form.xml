@@ -56,7 +56,7 @@
         <ExpandableListView
             android:layout_width="185dp"
             android:layout_height="44dp"
-            android:id="@+id/edit_form_list_view"
+            android:id="@+id/edit_form_pegi_list"
             android:layout_gravity="right" />
 
         <EditText
@@ -64,5 +64,13 @@
             android:layout_height="wrap_content"
             android:id="@+id/edit_form_count" />
     </LinearLayout>
+
+    <TextView
+        android:layout_width="214dp"
+        android:layout_height="wrap_content"
+        android:text="Platforms"
+        android:id="@+id/edit_form_platforms_text"
+        android:layout_weight="0.14"
+        android:textSize="35dp" />
 
 </LinearLayout>

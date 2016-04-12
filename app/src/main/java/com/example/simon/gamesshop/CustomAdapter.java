@@ -27,33 +27,25 @@ public class CustomAdapter extends BaseAdapter{
     Context context;
     private static LayoutInflater inflater=null;
     public CustomAdapter(AppCompatActivity mainActivity, String[] Name, int[] Count, Bitmap[] ImageURL, String[] UID) {
-        // TODO Auto-generated constructor stub
         context=mainActivity;
         this.Name=Name;
         this.ImageURL=ImageURL;
         this.UID = UID;
         this.Count = Count;
-
         inflater = ( LayoutInflater )context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
     @Override
     public int getCount() {
-        // TODO Auto-generated method stub
         return Name.length;
     }
-
     @Override
     public Object getItem(int position) {
-        // TODO Auto-generated method stub
         return position;
     }
-
     @Override
     public long getItemId(int position) {
-        // TODO Auto-generated method stub
         return position;
     }
-
     public class Holder
     {
         TextView NTV;
@@ -63,7 +55,6 @@ public class CustomAdapter extends BaseAdapter{
     }
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        // TODO Auto-generated method stub
         Holder holder=new Holder();
         View rowView;
         rowView = inflater.inflate(R.layout.row, null);
