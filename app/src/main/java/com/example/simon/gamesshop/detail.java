@@ -31,7 +31,7 @@ public class detail extends AppCompatActivity {
 
         Intent myIntent = getIntent();
         String gameId = myIntent.getStringExtra("UID");
-        GetDetail(gameId);
+       // GetDetail(gameId);
     }
     @Override
     public void onBackPressed()
@@ -41,7 +41,7 @@ public class detail extends AppCompatActivity {
         startActivity(new Intent(this, MainActivity.class));
         finish();
     }
-
+    /*
     public void GetDetail(String ID) {
         String Json = "";
         ArrayList<Game> GameList = new ArrayList<Game>();
@@ -65,7 +65,7 @@ public class detail extends AppCompatActivity {
         ListParser(jo, g);
         setDetail(g);
     }
-
+*/
     protected void setDetail(Game g){
 
         TextView detail_description = (TextView) findViewById(R.id.detail_description);

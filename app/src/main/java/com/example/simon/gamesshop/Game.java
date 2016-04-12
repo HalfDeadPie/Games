@@ -1,5 +1,6 @@
 package com.example.simon.gamesshop;
 
+import android.graphics.Bitmap;
 import android.util.Log;
 
 /**
@@ -35,6 +36,16 @@ public class Game
     private String uid;
 
     private String releaseDate;
+
+    private Bitmap coverImage;
+
+    public Bitmap getCoverImage() {
+        return coverImage;
+    }
+
+    public void setCoverImage(Bitmap coverImage) {
+        this.coverImage = coverImage;
+    }
 
     public String getUID(){ return uid;}
 

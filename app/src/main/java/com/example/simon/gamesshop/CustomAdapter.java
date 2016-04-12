@@ -6,6 +6,7 @@ package com.example.simon.gamesshop;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,12 +21,12 @@ import java.util.concurrent.ExecutionException;
 
 public class CustomAdapter extends BaseAdapter{
     String [] Name;
-    String[] ImageURL;
+    Bitmap[] ImageURL;
     String[] UID;
     int[] Count;
     Context context;
     private static LayoutInflater inflater=null;
-    public CustomAdapter(MainActivity mainActivity, String[] Name, int[] Count, String[] ImageURL, String[] UID) {
+    public CustomAdapter(AppCompatActivity mainActivity, String[] Name, int[] Count, Bitmap[] ImageURL, String[] UID) {
         // TODO Auto-generated constructor stub
         context=mainActivity;
         this.Name=Name;
@@ -73,23 +74,8 @@ public class CustomAdapter extends BaseAdapter{
 
         holder.NTV.setText(Name[position]);
         holder.CTV.setText(Integer.toString(Count[position]));
-        holder.img.setImageBitmap(getImage(ImageURL[position]));
+        holder.img.setImageBitmap(ImageURL[position]);
         holder.ID.setText(UID[position]);
         return rowView;
-    }
-
-
-    protected Bitmap getImage (String link){
-        Bitmap b = null;
-        AsyncTask<String, String, Bitmap> img = new Image();
-        img.execute(link);
-        try {
-            return b = (Bitmap) img.get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 }

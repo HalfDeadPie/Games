@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -35,34 +36,8 @@ public class MainActivity extends AppCompatActivity {
     public void GetAll() {
         String Json = "";
         ArrayList<Game> GameList = new ArrayList<Game>();
-        AsyncTask<String, String, String> con = new Connector();
+        Connector con = new Connector(this);
         con.execute("GETALL");
-        try {
-            Json = (String) con.get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-        ListView viewGL = (ListView)findViewById(R.id.viewGL);
-        AllListBuilder(Json, GameList);
-
-
-        String[] Names = new String[GameList.size()];
-        int[] Counts = new int[GameList.size()];
-        String[] ImageURLs = new String[GameList.size()];
-        String[] UIDs = new String[GameList.size()];
-
-        for(int i=0; i<GameList.size() ;i++){
-            Names[i] = GameList.get(i).getName();
-            Counts[i] = GameList.get(i).getCount();
-            ImageURLs[i]= GameList.get(i).getImage();
-            String ID = GameList.get(i).getUID();
-            System.out.println("Nastavuje hre[" + i + "] ID: " +ID);
-            UIDs[i] = ID;
-        }
-
-        viewGL.setAdapter(new CustomAdapter(this, Names, Counts, ImageURLs, UIDs));
     }
 
     //Z json stringu zadaného ako argument vráti zoznam hier triedy Game zadaný ako argument
