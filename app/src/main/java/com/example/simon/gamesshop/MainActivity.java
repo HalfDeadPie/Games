@@ -83,11 +83,11 @@ public class MainActivity extends AppCompatActivity {
         // ziska UID zaznamu a spusti novu aktivitu s tymto UID
 
         ViewGroup row = (ViewGroup) view.getParent();               // rodic
-        System.out.println(row);
+        //System.out.println(row);
         LinearLayout lay = (LinearLayout) row.findViewById(R.id.layout);
-        System.out.println(lay);
+        //System.out.println(lay);
         TextView textView = (TextView) lay.findViewById(R.id.uid);  // dieta (skryty textview obsahujuci UID)
-        System.out.println(textView);
+        //System.out.println(textView);
         String ID = textView.getText().toString();                  // z dietata nacitame UID
 
         //ProgressDialog Loading = ProgressDialog.show(MainActivity.this, "", "Loading. Please wait...", true);
