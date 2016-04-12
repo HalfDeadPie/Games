@@ -8,44 +8,51 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/edit_form_title"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:hint="Title"/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/edit_form_release"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:hint="Release date"/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/edit_form_price"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:hint="Price"/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/edit_form_rating"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:hint="Rating"/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textMultiLine"
         android:ems="10"
-        android:id="@+id/edit_form_decription" />
+        android:id="@+id/edit_form_decription"
+        android:hint="Description"/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/edit_form_producer"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:hint="Producer"/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/edit_form_languages"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:hint="Languages"/>
 
     <LinearLayout
         android:orientation="horizontal"
@@ -62,15 +69,181 @@
         <EditText
             android:layout_width="181dp"
             android:layout_height="wrap_content"
-            android:id="@+id/edit_form_count" />
+            android:id="@+id/edit_form_count"
+            android:hint="Count"/>
     </LinearLayout>
 
     <TextView
-        android:layout_width="214dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Platforms"
         android:id="@+id/edit_form_platforms_text"
-        android:layout_weight="0.14"
         android:textSize="35dp" />
 
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:foregroundGravity="center"
+        android:rowCount="3"
+        android:columnCount="3"
+        android:rowOrderPreserved="false"
+        android:orientation="horizontal">
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:text="PC"
+            android:id="@+id/radioButtonPC"
+            android:layout_row="0"
+            android:layout_column="0"
+            android:checked="false" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="PS3"
+            android:layout_row="0"
+            android:layout_column="1"
+            android:checked="false"
+            android:id="@+id/radiobutton4PS3" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="X BOX ONE"
+            android:id="@+id/radioButton3ONE"
+            android:layout_row="0"
+            android:layout_column="2"
+            android:checked="false" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:text="Nintendo Wii"
+            android:id="@+id/radioButton2_Wii"
+            android:layout_row="1"
+            android:layout_column="0"
+            android:checked="false" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="PS4"
+            android:id="@+id/radioButton5PS4"
+            android:layout_row="1"
+            android:layout_column="1"
+            android:checked="false" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="X BOX 360"
+            android:id="@+id/radioButton6360"
+            android:layout_row="1"
+            android:layout_column="2"
+            android:checked="false" />
+
+    </GridLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Genre"
+        android:id="@+id/edit_form_genres"
+        android:textSize="35dp" />
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:rowCount="5"
+        android:columnCount="2">
+
+        <RadioButton
+            android:layout_width="192dp"
+            android:layout_height="wrap_content"
+            android:text="Action"
+            android:id="@+id/radioButtonAction"
+            android:layout_row="0"
+            android:layout_column="0"
+            android:layout_columnSpan="2" />
+
+        <RadioButton
+            android:layout_width="192dp"
+            android:layout_height="wrap_content"
+            android:text="Adventure"
+            android:id="@+id/radioButtonAdventure"
+            android:layout_row="0"
+            android:layout_column="1" />
+
+        <RadioButton
+            android:layout_width="192dp"
+            android:layout_height="wrap_content"
+            android:text="Casual"
+            android:id="@+id/radioButtonCasual"
+            android:layout_row="1"
+            android:layout_column="0" />
+
+        <RadioButton
+            android:layout_width="192dp"
+            android:layout_height="wrap_content"
+            android:text="Indie"
+            android:id="@+id/radioButtonIndie"
+            android:layout_row="1"
+            android:layout_column="1" />
+
+        <RadioButton
+            android:layout_width="192dp"
+            android:layout_height="wrap_content"
+            android:text="MM"
+            android:id="@+id/radioButtonMM"
+            android:layout_row="2"
+            android:layout_column="0" />
+        <RadioButton
+            android:layout_width="192dp"
+            android:layout_height="wrap_content"
+            android:text="Racing"
+            android:id="@+id/radioButtonRacing"
+            android:layout_row="2"
+            android:layout_column="1" />
+        <RadioButton
+            android:layout_width="192dp"
+            android:layout_height="wrap_content"
+            android:text="RPG"
+            android:id="@+id/radioButtonRPG"
+            android:layout_row="3"
+            android:layout_column="0" />
+        <RadioButton
+            android:layout_width="192dp"
+            android:layout_height="wrap_content"
+            android:text="Simulation"
+            android:id="@+id/radioButtonSimulation"
+            android:layout_row="3"
+            android:layout_column="1" />
+        <RadioButton
+            android:layout_width="192dp"
+            android:layout_height="wrap_content"
+            android:text="Sports"
+            android:id="@+id/radioButtonSports"
+            android:layout_row="4"
+            android:layout_column="0" />
+        <RadioButton
+            android:layout_width="192dp"
+            android:layout_height="wrap_content"
+            android:text="Strategy"
+            android:id="@+id/radioButtonStrategy"
+            android:layout_row="4"
+            android:layout_column="1" />
+    </GridLayout>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/edit_form_image"
+        android:layout_gravity="center_horizontal"
+        android:hint="Cover image URL"/>
 </LinearLayout>
