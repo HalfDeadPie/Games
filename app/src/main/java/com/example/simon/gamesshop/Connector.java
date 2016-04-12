@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -40,6 +41,7 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
         this.activity = activity;
     }
     private static final String ourURL ="https://api.backendless.com/v1/data/Game";
+    private int aktivita;   // 1 - getAll() 2-getDetail()   3-delete()  4-update()...
 
     @Override
     protected void onPreExecute() {//pred vykonaním doInBackground načíta a zobrazí loader
@@ -49,27 +51,11 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
 
     @Override
     protected ArrayList<Game> doInBackground(String... params) {//vykonavanie v pozadí
-        ArrayList<Game> GameList = new ArrayList<Game>();
+
         //1. FUNKCIA VYTVORÍ ZOZNAM ZO VŠETKÝCH HIER
         if(params[0].equals("GETALL")){
-            try {
-                URL url = new URL(ourURL);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.addRequestProperty("application-id", "94B456C3-9A44-D044-FF87-A1D0AA589D00");
-                connection.addRequestProperty("secret-key", "CDA1E692-BF29-7396-FF7F-0E699E669000");
-                BufferedReader reader = new BufferedReader( new InputStreamReader(connection.getInputStream()));
-                StringBuffer json = new StringBuffer(1024);
-                String tmp = "";
-                while ((tmp = reader.readLine()) != null) {
-                    json.append(tmp).append("\n");
-                }
-                reader.close();
-                AllListBuilder(json.toString(), GameList);//vytvorenie zoznamu hier z JSONu
-                return GameList;//vrátenie kompletného zoznamu hier s potrebnými atribútmi
-            } catch (Exception e1) {
-                e1.printStackTrace();
-                return null;
-            }
+            aktivita = 1;   // v onPost spustame if ktory nastavi mainobrazovku
+            return getAll();
             //2. FUNKCIA NA PRIDANIE ZÁZNAMU O HRE
         }else if(params[0].equals("POST")){
 
@@ -77,40 +63,85 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
         }else if(params[0].equals("DELETE")){
             //4. FUNKCIA, KTORA ZOBRAZÍ DETAILNÝ ZÁZNAM O HRE
         }else if(params[0].equals("GETDETAIL")){
-            System.out.println(params[1].toString());
-            try {
-                URL url = new URL(ourURL+"/"+params[1]);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
-                System.out.println(url);
-                connection.addRequestProperty("application-id", "94B456C3-9A44-D044-FF87-A1D0AA589D00");
-                connection.addRequestProperty("secret-key", "CDA1E692-BF29-7396-FF7F-0E699E669000");
-                connection.addRequestProperty("application-type", "REST");
-                //connection.addRequestProperty("objectId", ID);
-                BufferedReader reader;
-                reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                StringBuilder json = new StringBuilder(1024);
-                String tmp = "";
-                while ((tmp = reader.readLine()) != null) {
-                    json.append(tmp).append("\n");
-                }
-                reader.close();
-                System.out.println("Server vratil odpoved : " + json.toString());
-                //return json.toString();
-
-            } catch (Exception e1) {
-                e1.printStackTrace();
-                return null;
-            }
+            aktivita = 2;   // v onPost spustame if ktoy nastavi detail obrazovku
+            return getDetail(params[1]);
         }
 
         return null;
     }
 
+    private ArrayList<Game> getDetail(String ID) {
+        ArrayList<Game> GameList = new ArrayList<Game>();
+        System.out.println(ID);
+        try {
+            URL url = new URL(ourURL+"/"+ID);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+            System.out.println(url);
+            connection.addRequestProperty("application-id", "94B456C3-9A44-D044-FF87-A1D0AA589D00");
+            connection.addRequestProperty("secret-key", "CDA1E692-BF29-7396-FF7F-0E699E669000");
+            connection.addRequestProperty("application-type", "REST");
+            //connection.addRequestProperty("objectId", ID);
+            BufferedReader reader;
+            reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            StringBuilder json = new StringBuilder(1024);
+            String tmp = "";
+            while ((tmp = reader.readLine()) != null) {
+                json.append(tmp).append("\n");  // vytvorime jeden velky json
+            }
+            reader.close();
+
+            AllListBuilder(json.toString(), GameList);//vytvorenie zoznamu hier z JSONu
+            //json vlozime do GameListu, kedze detail zobrazuje iba 1 zaznam gamelist obsahuje len 1 zaznam
+            return GameList;//vrátenie kompletného zoznamu hier s potrebnými atribútmi
+            // returnujeme gamelist a zaroven spustame onpost
+
+            //System.out.println("Server vratil odpoved : " + json.toString());
+            //return json.toString();
+
+        } catch (Exception e1) {
+            e1.printStackTrace();
+            return null;
+        }
+    }
+
+    private  ArrayList<Game> getAll() {
+        ArrayList<Game> GameList = new ArrayList<Game>();
+        try {
+            URL url = new URL(ourURL);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.addRequestProperty("application-id", "94B456C3-9A44-D044-FF87-A1D0AA589D00");
+            connection.addRequestProperty("secret-key", "CDA1E692-BF29-7396-FF7F-0E699E669000");
+            BufferedReader reader = new BufferedReader( new InputStreamReader(connection.getInputStream()));
+            StringBuffer json = new StringBuffer(1024);
+            String tmp = "";
+            while ((tmp = reader.readLine()) != null) {
+                json.append(tmp).append("\n");
+            }
+            reader.close();
+            AllListBuilder(json.toString(), GameList);//vytvorenie zoznamu hier z JSONu
+            return GameList;//vrátenie kompletného zoznamu hier s potrebnými atribútmi
+        } catch (Exception e1) {
+            e1.printStackTrace();
+            return null;
+        }
+    }
+
     @Override
     protected void onPostExecute(ArrayList<Game> GameList) {
         super.onPostExecute(GameList);
+        if(aktivita == 1){   // getAll();
+            setMain(GameList);
+            Loading.dismiss();
+        }else if(aktivita == 2){    // getDetail()
+            setDetail(GameList.get(0)); // nastavi detail okno
+            Loading.dismiss();          // zastavi loading
+        }
 
+
+    }
+
+    protected void setMain(ArrayList<Game> GameList){
         ListView viewGL = (ListView) activity.findViewById(R.id.viewGL);
 
         String[] Names = new String[GameList.size()];
@@ -123,12 +154,46 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
             Counts[i] = GameList.get(i).getCount();
             Images[i]= GameList.get(i).getCoverImage();
             String ID = GameList.get(i).getUID();
-           // System.out.println("Nastavuje hre[" + i + "] ID: " +ID);
+            // System.out.println("Nastavuje hre[" + i + "] ID: " +ID);
             UIDs[i] = ID;
         }
         viewGL.setAdapter(new CustomAdapter(activity, Names, Counts, Images, UIDs));
-        Loading.dismiss();
     }
+
+    protected void setDetail(Game g){
+        // z premennej activity (aktualne detail okno) vyberame vsetky komponenty a
+        // nastavime do nich data
+        TextView detail_description = (TextView) activity.findViewById(R.id.detail_description);
+        TextView detail_name = (TextView) activity.findViewById(R.id.detail_name);
+        ImageView detail_image = (ImageView) activity.findViewById(R.id.detail_image);
+        TextView detail_pegi = (TextView) activity.findViewById(R.id.detail_pegi);
+        TextView detail_rating = (TextView) activity.findViewById(R.id.detail_rating);
+        TextView detail_price = (TextView) activity.findViewById(R.id.detail_price);
+        TextView detail_date = (TextView) activity.findViewById(R.id.detail_date);
+        TextView detail_count = (TextView) activity.findViewById(R.id.detail_count);
+        TextView detail_producer = (TextView) activity.findViewById(R.id.detail_producer);
+        TextView detail_genre = (TextView) activity.findViewById(R.id.detail_genre);
+        TextView detail_language = (TextView) activity.findViewById(R.id.detail_language);
+        TextView detail_platform = (TextView) activity.findViewById(R.id.detail_platform);
+
+
+
+        detail_name.setText(g.getName());
+        detail_image.setImageBitmap(g.getCoverImage());
+        detail_pegi.setText(g.getPegi());
+        detail_rating.setText(Integer.toString(g.getRating()) + "%");
+        detail_price.setText(Integer.toString(g.getPrice())+" €");
+        detail_description.setText(g.getDescription());
+        detail_count.setText(Integer.toString(g.getCount()));
+        detail_date.setText(g.getReleaseDate());
+        detail_producer.setText(g.getProducer());
+        detail_genre.setText(Integer.toString(g.getGenre()));
+        detail_language.setText(g.getLanguage());
+        detail_platform.setText(Integer.toString(g.getPlatform()));
+    }
+
+
+
 
     public static String httpGet(String ID) throws IOException {
         ID = "267FBCE3-25CF-DC4E-FF67-B9311AE18E00";
@@ -213,18 +278,37 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
     }
 
     public ArrayList<Game> AllListBuilder(String JsonString,  ArrayList<Game> GameList){
-        try {
-            JSONObject ParentObject = new JSONObject(JsonString);//mega json so všetkým, čo prišlo
-            JSONArray ParentArray = ParentObject.getJSONArray("data");//pole jsonov - vybrané len data bez headeru
-            if (ParentArray != null)//všetky hry v JSONe pridá do zoznamu
-                for (int i=0;i<ParentArray.length();i++){
-                    GameList.add(ListParser(ParentArray.getJSONObject(i), new Game()));
-                }
+        if(aktivita ==1){   // getAll() - pride velky json
+            try {
+                JSONObject ParentObject = new JSONObject(JsonString);//mega json so všetkým, čo prišlo
+                JSONArray ParentArray = ParentObject.getJSONArray("data");//pole jsonov - vybrané len data bez headeru
+                if (ParentArray != null)//všetky hry v JSONe pridá do zoznamu
+                    for (int i=0;i<ParentArray.length();i++){
+                        GameList.add(ListParser(ParentArray.getJSONObject(i), new Game()));
+                    }
+            }
+            catch(Exception e)
+            {
+                Log.d("JSON", "Toto je chyba s JSONOM:" + e.getMessage());//debug výpis
+            }
+            return GameList;
+        }else if(aktivita == 2){    // getDetail() - pride maly json
+            try {
+
+                JSONObject ParentObject = new JSONObject(JsonString);//mega json so všetkým, čo prišlo
+               // JSONArray ParentArray = ParentObject.getJSONArray("data");//pole jsonov - vybrané len data bez headeru
+                if (ParentObject != null)//všetky hry v JSONe pridá do zoznamu
+                    for (int i=0;i<ParentObject.length();i++){
+                        GameList.add(ListParser(ParentObject, new Game()));
+                    }
+            }
+            catch(Exception e)
+            {
+                Log.d("JSON", "Toto je chyba s JSONOM:" + e.getMessage());//debug výpis
+            }
+            return GameList;
         }
-        catch(Exception e)
-        {
-            Log.d("JSON", "Toto je chyba s JSONOM:" + e.getMessage());//debug výpis
-        }
+
         return GameList;
     }
 
