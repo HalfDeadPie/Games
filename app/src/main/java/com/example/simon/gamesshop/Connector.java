@@ -81,6 +81,11 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
             System.out.println("(EXECUTE)UID:"+params[1]+" COUNT:"+params[2]);
             Buy(params[1],Integer.parseInt(params[2]));
         }
+        else if(params[0].equals("SELL")){
+            aktivita = 6;
+            System.out.println("(EXECUTE)UID:"+params[1]+" COUNT:"+params[2]);
+            Sell(params[1],Integer.parseInt(params[2]));
+        }
         return null;
     }
 
@@ -232,7 +237,7 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
                 String json = "";
                 JSONObject jsonObject;
                 jsonObject = new JSONObject();
-                jsonObject.put("count",count);
+                jsonObject.put("count", count);
                 json = jsonObject.toString();
 
                 //tu by sa to malo odoslať
@@ -247,6 +252,40 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+    }
+    private void Sell(String UID, int count){
+        // Create a new HttpClient and Post Header
+        try {
+            count--;
+            URL url = new URL(ourURL+"/"+UID);
+            System.out.println(url);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+            connection.addRequestProperty("application-id", "94B456C3-9A44-D044-FF87-A1D0AA589D00");
+            connection.addRequestProperty("secret-key", "CDA1E692-BF29-7396-FF7F-0E699E669000");
+            connection.addRequestProperty("application-type", "REST");
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setRequestProperty("Accept", "application/json");
+
+            //tu zostavím json
+            String json = "";
+            JSONObject jsonObject;
+            jsonObject = new JSONObject();
+            jsonObject.put("count",count);
+            json = jsonObject.toString();
+
+            //tu by sa to malo odoslať
+            connection.setDoOutput(true);
+            connection.setRequestMethod("PUT");
+            OutputStreamWriter out = new OutputStreamWriter(
+                    connection.getOutputStream());
+            out.write(json);
+            out.flush();
+            out.close();
+            System.out.println(connection.getResponseCode());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private  ArrayList<Game> getAll() {
@@ -291,7 +330,9 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
         else if(aktivita == 5){//Buy() - inkrementovanie hodnoty počtu kusov
             Loading.dismiss();
         }
-
+        else if(aktivita == 6){//Sell() - dekrementovanie hodnoty počtu kusov
+            Loading.dismiss();
+        }
 
     }
 
