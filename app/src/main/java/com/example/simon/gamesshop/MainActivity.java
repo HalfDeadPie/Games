@@ -135,14 +135,14 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("ID:     "+ID);
 
 
-        ProgressDialog Loading = ProgressDialog.show(MainActivity.this, "", "Loading. Please wait...", true);
-        System.out.println("Som tu1");
+        //ProgressDialog Loading = ProgressDialog.show(MainActivity.this, "", "Loading. Please wait...", true);
+        //System.out.println("Som tu1");
         Intent intent = new Intent(this,edit_form.class);
-        System.out.println("Som tu2");
+        //System.out.println("Som tu2");
         intent.putExtra("ID", ID);//Put your id to your next Intent
-        System.out.println(intent);
+        //System.out.println(intent);
         startActivity(intent);
-        System.out.println("Som tu4");
+        //System.out.println("Som tu4");
         finish();
 
 
