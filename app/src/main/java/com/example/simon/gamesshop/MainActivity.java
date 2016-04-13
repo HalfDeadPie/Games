@@ -116,4 +116,16 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
+    public void BuyFromList(View view){
+        // ziska UID zaznamu a spusti novu aktivitu s tymto UID
+
+        ViewGroup row = (ViewGroup) view.getParent();
+        LinearLayout lay1 = (LinearLayout) row.getParent();
+        LinearLayout lay2 = (LinearLayout) lay1.getParent();
+        ViewGroup row2 = (ViewGroup) lay2.getParent();
+        LinearLayout lay3 = (LinearLayout) row2.findViewById(R.id.layout);
+        TextView textView = (TextView) lay3.findViewById(R.id.uid);  // dieta (skryty textview obsahujuci UID)
+        String ID = textView.getText().toString();
+        System.out.println(ID);
+    }
 }

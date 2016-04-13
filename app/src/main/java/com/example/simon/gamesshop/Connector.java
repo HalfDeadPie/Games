@@ -91,7 +91,7 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
             }
             reader.close();
 
-            AllListBuilder(json.toString(), GameList);//vytvorenie zoznamu hier z JSONu
+            AllListBuilder(json.toString(), GameList);
             //json vlozime do GameListu, kedze detail zobrazuje iba 1 zaznam gamelist obsahuje len 1 zaznam
             return GameList;//vrátenie kompletného zoznamu hier s potrebnými atribútmi
             // returnujeme gamelist a zaroven spustame onpost
@@ -104,7 +104,13 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
             return null;
         }
     }
+    private void Buy(){
+        try {
 
+        } catch (Exception e1) {
+
+        }
+    }
     private  ArrayList<Game> getAll() {
         ArrayList<Game> GameList = new ArrayList<Game>();
         try {
