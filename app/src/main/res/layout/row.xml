@@ -112,7 +112,8 @@
                 android:orientation="vertical"
                 android:layout_width="72dp"
                 android:layout_height="132dp"
-                android:id="@+id/layout">
+                android:id="@+id/layout"
+                android:onClick="toEdit">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -123,7 +124,8 @@
                     android:gravity="center"
                     android:layout_gravity="center"
                     android:layout_marginTop="40dp"
-                    android:textColor="#00aeff" />
+                    android:textColor="#00aeff"
+                    android:onClick="toEdit" />
 
                 <TextView
                     android:layout_width="wrap_content"
