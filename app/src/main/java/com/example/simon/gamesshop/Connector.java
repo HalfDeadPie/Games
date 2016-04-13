@@ -41,7 +41,7 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
         this.activity = activity;
     }
     private static final String ourURL ="https://api.backendless.com/v1/data/Game";
-    private int aktivita;   // 1 - getAll() 2-getDetail()   3-delete()  4-update()...
+    private int aktivita;   // 1 - getAll() 2-getDetail()   3-getEdit()...
 
     @Override
     protected void onPreExecute() {//pred vykonaním doInBackground načíta a zobrazí loader
@@ -65,11 +65,19 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
         }else if(params[0].equals("GETDETAIL")){
             aktivita = 2;   // v onPost spustame if ktoy nastavi detail obrazovku
             return getDetail(params[1]);
+        }else if(params[0].equals("GETEDIT")){
+            aktivita = 3;
+            return getDetail(params[1]);
         }
 
         return null;
     }
+/*
+    private ArrayList<Game> getEdit(String ID) {
 
+        return null;
+    }
+*/
     private ArrayList<Game> getDetail(String ID) {
         ArrayList<Game> GameList = new ArrayList<Game>();
         System.out.println(ID);
@@ -89,9 +97,13 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
             while ((tmp = reader.readLine()) != null) {
                 json.append(tmp).append("\n");  // vytvorime jeden velky json
             }
+
             reader.close();
 
             AllListBuilder(json.toString(), GameList);
+            AllListBuilder(json.toString(), GameList);//vytvorenie zoznamu hier z JSONu
+            System.out.println("ID je: " + ID);
+            System.out.println("Velkost GameList-u je: " + GameList.size());
             //json vlozime do GameListu, kedze detail zobrazuje iba 1 zaznam gamelist obsahuje len 1 zaznam
             return GameList;//vrátenie kompletného zoznamu hier s potrebnými atribútmi
             // returnujeme gamelist a zaroven spustame onpost
@@ -142,8 +154,42 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
         }else if(aktivita == 2){    // getDetail()
             setDetail(GameList.get(0)); // nastavi detail okno
             Loading.dismiss();          // zastavi loading
+        }else if(aktivita == 3){
+            setEdit(GameList.get(0));
+            Loading.dismiss();
         }
 
+
+    }
+
+    private void setEdit(Game g) {
+        TextView detail_description = (TextView) activity.findViewById(R.id.edit_form_decription);
+        TextView detail_name = (TextView) activity.findViewById(R.id.edit_form_name);
+        //ImageView detail_image = (ImageView) activity.findViewById(R.id.edit_form_image);
+        TextView detail_pegi = (TextView) activity.findViewById(R.id.edit_form_pegi);
+        TextView detail_rating = (TextView) activity.findViewById(R.id.edit_form_rating);
+        TextView detail_price = (TextView) activity.findViewById(R.id.edit_form_price);
+        //TextView detail_date = (TextView) activity.findViewById(R.id.edit_form_date);
+        TextView detail_count = (TextView) activity.findViewById(R.id.edit_form_count);
+        TextView detail_producer = (TextView) activity.findViewById(R.id.edit_form_producer);
+        //TextView detail_genre = (TextView) activity.findViewById(R.id.edit_form_genre);
+        //TextView detail_language = (TextView) activity.findViewById(R.id.edit_form_language);
+        //TextView detail_platform = (TextView) activity.findViewById(R.id.edit_form_platform);
+
+
+
+        detail_name.setText(g.getName());
+        //detail_image.setImageBitmap(g.getCoverImage());
+        detail_pegi.setText(g.getPegi());
+        detail_rating.setText(Integer.toString(g.getRating()) + "%");
+        detail_price.setText(Integer.toString(g.getPrice())+" €");
+        detail_description.setText(g.getDescription());
+        detail_count.setText(Integer.toString(g.getCount()));
+        //detail_date.setText(g.getReleaseDate());
+        detail_producer.setText(g.getProducer());
+        //detail_genre.setText(Integer.toString(g.getGenre()));
+        //detail_language.setText(g.getLanguage());
+        //detail_platform.setText(Integer.toString(g.getPlatform()));
 
     }
 
@@ -298,7 +344,7 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
                 Log.d("JSON", "Toto je chyba s JSONOM:" + e.getMessage());//debug výpis
             }
             return GameList;
-        }else if(aktivita == 2){    // getDetail() - pride maly json
+        }else if(aktivita == 2 || aktivita == 3){    // getDetail() - pride maly json alebo // getedit()
             try {
 
                 JSONObject ParentObject = new JSONObject(JsonString);//mega json so všetkým, čo prišlo

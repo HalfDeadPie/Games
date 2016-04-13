@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -96,24 +97,55 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+    public void sell(View view){
+
+    }
+    public void buy(View view){
+
+    }
     public void toDetailFromName(View view){
         // ziska UID zaznamu a spusti novu aktivitu s tymto UID
-        ViewGroup row = (ViewGroup) view.getParent();               // rodic
-        System.out.println("Prvy rodic"+row);
-        ViewGroup row2 = (ViewGroup) row.getParent();
-        LinearLayout lay = (LinearLayout) row2.findViewById(R.id.layout);
+
+        LinearLayout lay = (LinearLayout) view.getParent();
         System.out.println(lay);
-        TextView textView = (TextView) lay.findViewById(R.id.uid);  // dieta (skryty textview obsahujuci UID)
+        ViewGroup table = (ViewGroup) lay.getParent();
+
+        TextView textView = (TextView) table.findViewById(R.id.uid);  // dieta (skryty textview obsahujuci UID)
         System.out.println(textView);
         String ID = textView.getText().toString();                  // z dietata nacitame UID
-
+        System.out.println("ID:     "+ID);
         // spustenie novej aktivity s UID
+
 
         ProgressDialog Loading = ProgressDialog.show(MainActivity.this, "", "Loading. Please wait...", true);
         Intent intent = new Intent(this, detail.class);
         intent.putExtra("UID", ID);//Put your id to your next Intent
         startActivity(intent);
         finish();
+
+    }
+
+    public void toEdit(View view){
+        LinearLayout lay = (LinearLayout) view.getParent();
+        ViewGroup table = (ViewGroup) lay.getParent();
+
+        TextView textView = (TextView) table.findViewById(R.id.uid);  // dieta (skryty textview obsahujuci UID)
+        System.out.println(textView);
+        String ID = textView.getText().toString();                  // z dietata nacitame UID
+        System.out.println("ID:     "+ID);
+
+
+        ProgressDialog Loading = ProgressDialog.show(MainActivity.this, "", "Loading. Please wait...", true);
+        System.out.println("Som tu1");
+        Intent intent = new Intent(this,edit_form.class);
+        System.out.println("Som tu2");
+        intent.putExtra("ID", ID);//Put your id to your next Intent
+        System.out.println(intent);
+        startActivity(intent);
+        System.out.println("Som tu4");
+        finish();
+
+
     }
 
     public void BuyFromList(View view){

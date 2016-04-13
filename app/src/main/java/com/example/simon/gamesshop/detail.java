@@ -43,10 +43,9 @@ public class detail extends AppCompatActivity {
     }
 
     public void GetDetail(String ID) {
-        String Json = "";
-        ArrayList<Game> GameList = new ArrayList<Game>();
+
         Connector con = new Connector(this);
-        System.out.println(ID);
+        //System.out.println(ID);
         con.execute("GETDETAIL", ID);
         /*
         try {
