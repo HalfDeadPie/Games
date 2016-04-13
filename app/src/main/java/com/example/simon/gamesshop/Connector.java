@@ -76,7 +76,11 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
             aktivita = 4;
             return sendEdit();
         }
-
+        else if(params[0].equals("BUY")){
+            aktivita = 5;
+            System.out.println("(EXECUTE)UID:"+params[1]+" COUNT:"+params[2]);
+            Buy(params[1],Integer.parseInt(params[2]));
+        }
         return null;
     }
 
@@ -210,6 +214,41 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
         }
     }
 
+    private void Buy(String UID, int count){
+            // Create a new HttpClient and Post Header
+            try {
+                count++;
+                URL url = new URL(ourURL+"/"+UID);
+                System.out.println(url);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+                connection.addRequestProperty("application-id", "94B456C3-9A44-D044-FF87-A1D0AA589D00");
+                connection.addRequestProperty("secret-key", "CDA1E692-BF29-7396-FF7F-0E699E669000");
+                connection.addRequestProperty("application-type", "REST");
+                connection.setRequestProperty("Content-Type", "application/json");
+                connection.setRequestProperty("Accept", "application/json");
+
+                //tu zostavím json
+                String json = "";
+                JSONObject jsonObject;
+                jsonObject = new JSONObject();
+                jsonObject.put("count",count);
+                json = jsonObject.toString();
+
+                //tu by sa to malo odoslať
+                connection.setDoOutput(true);
+                connection.setRequestMethod("PUT");
+                OutputStreamWriter out = new OutputStreamWriter(
+                        connection.getOutputStream());
+                out.write(json);
+                out.flush();
+                out.close();
+                System.out.println(connection.getResponseCode());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+    }
+
     private  ArrayList<Game> getAll() {
         ArrayList<Game> GameList = new ArrayList<Game>();
         try {
@@ -245,8 +284,11 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
             setEdit(GameList.get(0));
             Loading.dismiss();
         }
-        else if(aktivita == 4){
 
+        else if(aktivita == 4) {
+
+        }
+        else if(aktivita == 5){//Buy() - inkrementovanie hodnoty počtu kusov
             Loading.dismiss();
         }
 
@@ -256,9 +298,14 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
     private void setEdit(Game g) {
         TextView detail_description = (TextView) activity.findViewById(R.id.edit_form_decription);
         TextView detail_name = (TextView) activity.findViewById(R.id.edit_form_title);
+
         TextView detail_image = (TextView) activity.findViewById(R.id.edit_form_image);
         //ExpandableListView detail_pegi = (ExpandableListView) activity.findViewById(R.id.edit_form_pegi_list);
         TextView detail_pegi =(TextView) activity.findViewById(R.id.edit_form_pegi);
+
+        //ImageView detail_image = (ImageView) activity.findViewById(R.id.edit_form_image);
+       // TextView detail_pegi = (TextView) activity.findViewById(R.id.edit_form_pegi_list);
+
         TextView detail_rating = (TextView) activity.findViewById(R.id.edit_form_rating);
         TextView detail_price = (TextView) activity.findViewById(R.id.edit_form_price);
         TextView detail_date = (TextView) activity.findViewById(R.id.edit_form_release);
@@ -287,8 +334,13 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
 
 
         detail_name.setText(g.getName());
+
         detail_image.setText(g.getImage());
         detail_pegi.setText(g.getPegi());
+
+        //detail_image.setImageBitmap(g.getCoverImage());
+       // detail_pegi.setText(g.getPegi());
+
         detail_rating.setText(Integer.toString(g.getRating()) + "%");
         detail_price.setText(Integer.toString(g.getPrice()) + " €");
         detail_description.setText(g.getDescription());
