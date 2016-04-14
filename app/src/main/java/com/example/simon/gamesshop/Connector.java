@@ -142,7 +142,7 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
             String json = "";
             JSONObject jsonObject;
             jsonObject = new JSONObject();
-            jsonObject.put("iamge",g.getImage());
+            jsonObject.put("image",g.getImage());
             jsonObject.put("pegi",g.getPegi());
             jsonObject.put("rating",g.getRating());
             jsonObject.put("count",g.getCount());
