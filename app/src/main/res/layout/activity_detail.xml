@@ -34,6 +34,18 @@
             android:drawSelectorOnTop="false">
 
             <TextView
+                android:id="@+id/detail_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:minHeight="80px"
+                android:textSize="16dp"
+                android:visibility="invisible"/>
+            <TextView
                 android:id="@+id/detail_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -170,10 +182,10 @@
                 android:id="@+id/detail_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignEnd="@+id/button4"
+                android:layout_alignEnd="@+id/detail_sell"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_alignRight="@+id/button4"
+                android:layout_alignRight="@+id/detail_sell"
                 android:layout_below="@+id/detail_description"
                 android:background="#ffffff"
                 android:text="123"
@@ -182,7 +194,7 @@
                 android:textSize="35dp" />
 
             <Button
-                android:id="@+id/button3"
+                android:id="@+id/detail_buy"
                 style="?android:attr/buttonStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -190,18 +202,20 @@
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/detail_count"
                 android:background="#00d9ff"
-                android:text="BUY" />
+                android:text="BUY"
+                android:onClick="BuyFromList" />
 
             <Button
-                android:id="@+id/button4"
+                android:id="@+id/detail_sell"
                 style="?android:attr/buttonStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/detail_count"
-                android:layout_toEndOf="@+id/button3"
-                android:layout_toRightOf="@+id/button3"
+                android:layout_toEndOf="@+id/detail_buy"
+                android:layout_toRightOf="@+id/detail_buy"
                 android:background="#b70000"
-                android:text="SELL" />
+                android:text="SELL"
+                android:onClick="SellFromList"/>
 
             <Button
                 android:id="@+id/button5"
@@ -209,8 +223,8 @@
                 android:layout_height="wrap_content"
                 android:text="DELETE"
                 android:textColor="#ff0000"
-                android:layout_alignBaseline="@+id/button4"
-                android:layout_alignBottom="@+id/button4"
+                android:layout_alignBaseline="@+id/detail_sell"
+                android:layout_alignBottom="@+id/detail_sell"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true" />
 
@@ -220,7 +234,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/button3"
+                android:layout_below="@+id/detail_buy"
                 android:text="Trailer:" />
 
             <TextView

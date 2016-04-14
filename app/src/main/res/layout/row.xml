@@ -103,7 +103,8 @@
                         android:textColor="#ffffff"
                         android:gravity="center"
                         android:layout_weight="0.59"
-                        android:background="#ff0000" />
+                        android:background="#ff0000"
+                        android:onClick="SellFromList"/>
                 </LinearLayout>
 
             </LinearLayout>

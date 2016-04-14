@@ -5,6 +5,7 @@ package com.example.simon.gamesshop;
  */
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -65,6 +66,9 @@ public class CustomAdapter extends BaseAdapter{
 
         holder.NTV.setText(Name[position]);
         holder.CTV.setText(Integer.toString(Count[position]));
+        if(Count[position]==0){
+            holder.CTV.setTextColor(Color.RED);
+        }
         holder.img.setImageBitmap(ImageURL[position]);
         holder.ID.setText(UID[position]);
         return rowView;

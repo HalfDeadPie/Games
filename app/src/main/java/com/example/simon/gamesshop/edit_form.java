@@ -39,7 +39,10 @@ public class edit_form extends AppCompatActivity {
 
     public void sendEdit(View view){
         Connector con = new Connector(this);
-        con.execute("SENDEDIT");
+        TextView idView = (TextView) findViewById(R.id.edit_form_uid);
+        System.out.println("očakavana chyba:"+idView);
+        String id = idView.getText().toString();
+        con.execute("SENDEDIT",id);
 
         TextView detail_description = (TextView) findViewById(R.id.edit_form_decription);
         TextView detail_name = (TextView) findViewById(R.id.edit_form_title);

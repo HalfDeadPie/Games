@@ -3,6 +3,7 @@ package com.example.simon.gamesshop;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -73,10 +74,21 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
             ID = params[1];
             return getDetail(params[1]);
         }else if(params[0].equals("SENDEDIT")){
+            ID = params[1];
+            System.out.println("Connector vypis:"+ID);
             aktivita = 4;
             return sendEdit();
         }
-
+        else if(params[0].equals("BUY")){
+            aktivita = 5;
+            System.out.println("(EXECUTE)UID:"+params[1]+" COUNT:"+params[2]);
+            Buy(params[1],Integer.parseInt(params[2]));
+        }
+        else if(params[0].equals("SELL")){
+            aktivita = 6;
+            System.out.println("(EXECUTE)UID:"+params[1]+" COUNT:"+params[2]);
+            Sell(params[1],Integer.parseInt(params[2]));
+        }
         return null;
     }
 
@@ -165,7 +177,7 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
             out.write(json);
             out.flush();
             out.close();
-            System.out.println(connection.getResponseCode());
+            System.out.println("Edit form response:"+connection.getResponseCode());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -210,6 +222,74 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
         }
     }
 
+    private void Buy(String UID, int count){
+            // Create a new HttpClient and Post Header
+            try {
+                count++;
+                URL url = new URL(ourURL+"/"+UID);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+                connection.addRequestProperty("application-id", "94B456C3-9A44-D044-FF87-A1D0AA589D00");
+                connection.addRequestProperty("secret-key", "CDA1E692-BF29-7396-FF7F-0E699E669000");
+                connection.addRequestProperty("application-type", "REST");
+                connection.setRequestProperty("Content-Type", "application/json");
+                connection.setRequestProperty("Accept", "application/json");
+
+                //tu zostavím json
+                String json = "";
+                JSONObject jsonObject;
+                jsonObject = new JSONObject();
+                jsonObject.put("count", count);
+                json = jsonObject.toString();
+
+                //tu by sa to malo odoslať
+                connection.setDoOutput(true);
+                connection.setRequestMethod("PUT");
+                OutputStreamWriter out = new OutputStreamWriter(
+                        connection.getOutputStream());
+                out.write(json);
+                out.flush();
+                out.close();
+                System.out.println("Response:"+connection.getResponseCode());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+    }
+    private void Sell(String UID, int count){
+        // Create a new HttpClient and Post Header
+        try {
+            count--;
+            URL url = new URL(ourURL+"/"+UID);
+            System.out.println(url);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+            connection.addRequestProperty("application-id", "94B456C3-9A44-D044-FF87-A1D0AA589D00");
+            connection.addRequestProperty("secret-key", "CDA1E692-BF29-7396-FF7F-0E699E669000");
+            connection.addRequestProperty("application-type", "REST");
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setRequestProperty("Accept", "application/json");
+
+            //tu zostavím json
+            String json = "";
+            JSONObject jsonObject;
+            jsonObject = new JSONObject();
+            jsonObject.put("count",count);
+            json = jsonObject.toString();
+
+            //tu by sa to malo odoslať
+            connection.setDoOutput(true);
+            connection.setRequestMethod("PUT");
+            OutputStreamWriter out = new OutputStreamWriter(
+                    connection.getOutputStream());
+            out.write(json);
+            out.flush();
+            out.close();
+            System.out.println(connection.getResponseCode());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private  ArrayList<Game> getAll() {
         ArrayList<Game> GameList = new ArrayList<Game>();
         try {
@@ -245,27 +325,37 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
             setEdit(GameList.get(0));
             Loading.dismiss();
         }
-        else if(aktivita == 4){
 
+        else if(aktivita == 4) {
             Loading.dismiss();
         }
-
+        else if(aktivita == 5){//Buy() - inkrementovanie hodnoty počtu kusov
+            Loading.dismiss();
+        }
+        else if(aktivita == 6){//Sell() - dekrementovanie hodnoty počtu kusov
+            Loading.dismiss();
+        }
 
     }
 
     private void setEdit(Game g) {
         TextView detail_description = (TextView) activity.findViewById(R.id.edit_form_decription);
         TextView detail_name = (TextView) activity.findViewById(R.id.edit_form_title);
+
         TextView detail_image = (TextView) activity.findViewById(R.id.edit_form_image);
         //ExpandableListView detail_pegi = (ExpandableListView) activity.findViewById(R.id.edit_form_pegi_list);
         TextView detail_pegi =(TextView) activity.findViewById(R.id.edit_form_pegi);
+
+        //ImageView detail_image = (ImageView) activity.findViewById(R.id.edit_form_image);
+       // TextView detail_pegi = (TextView) activity.findViewById(R.id.edit_form_pegi_list);
+
         TextView detail_rating = (TextView) activity.findViewById(R.id.edit_form_rating);
         TextView detail_price = (TextView) activity.findViewById(R.id.edit_form_price);
         TextView detail_date = (TextView) activity.findViewById(R.id.edit_form_release);
         TextView detail_count = (TextView) activity.findViewById(R.id.edit_form_count);
         TextView detail_producer = (TextView) activity.findViewById(R.id.edit_form_producer);
         TextView detail_language = (TextView) activity.findViewById(R.id.edit_form_languages);
-       // TextView uid = (TextView) activity.findViewById(R.id.uid);
+        TextView uid = (TextView) activity.findViewById(R.id.uid);
 
         RadioButton g0 = (RadioButton) activity.findViewById(R.id.radioButtonAction);
         RadioButton g1 = (RadioButton) activity.findViewById(R.id.radioButtonAdventure);
@@ -287,8 +377,13 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
 
 
         detail_name.setText(g.getName());
+
         detail_image.setText(g.getImage());
         detail_pegi.setText(g.getPegi());
+
+        //detail_image.setImageBitmap(g.getCoverImage());
+       // detail_pegi.setText(g.getPegi());
+
         detail_rating.setText(Integer.toString(g.getRating()) + "%");
         detail_price.setText(Integer.toString(g.getPrice()) + " €");
         detail_description.setText(g.getDescription());
@@ -387,6 +482,7 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
         TextView detail_genre = (TextView) activity.findViewById(R.id.detail_genre);
         TextView detail_language = (TextView) activity.findViewById(R.id.detail_language);
         TextView detail_platform = (TextView) activity.findViewById(R.id.detail_platform);
+        TextView detail_id = (TextView) activity.findViewById(R.id.detail_id);
 
 
 
@@ -397,11 +493,15 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
         detail_price.setText(Integer.toString(g.getPrice()));
         detail_description.setText(g.getDescription());
         detail_count.setText(Integer.toString(g.getCount()));
+        if(g.getCount()==0){
+            detail_count.setTextColor(Color.RED);
+        }
         detail_date.setText(g.getReleaseDate());
         detail_producer.setText(g.getProducer());
         detail_genre.setText(Integer.toString(g.getGenre()));
         detail_language.setText(g.getLanguage());
         detail_platform.setText(Integer.toString(g.getPlatform()));
+        detail_id.setText(g.getUID());
     }
 
 
