@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -41,8 +42,14 @@ public class detail extends AppCompatActivity {
     }
 
     @Override
+<<<<<<< HEAD
     public void onBackPressed() {
         //ProgressDialog Loading = ProgressDialog.show(detail.this, "", "Loading. Please wait...", true);
+=======
+    public void onBackPressed()
+    {
+        ProgressDialog Loading = ProgressDialog.show(detail.this, "", "Loading. Please wait...", true);
+>>>>>>> d50e7fcd9157f2f8f280a51a0116d8d77c427533
         super.onBackPressed();
         startActivity(new Intent(this, MainActivity.class));
         finish();
@@ -109,6 +116,21 @@ public class detail extends AppCompatActivity {
         String incString = sb.toString();
         countView.setText(incString);
         countView.setTextColor(Color.BLACK);
+    }
+
+    public void showImage(View view){
+        ImageView i = (ImageView) findViewById(R.id.detail_image);
+        TextView id = (TextView) findViewById(R.id.detail_id);
+        Bitmap bitmap = ((BitmapDrawable)i.getDrawable()).getBitmap();
+
+        Intent intent = new Intent(this, image_detail.class);
+        intent.putExtra("IMAGE", bitmap );//Put your id to your next Intent
+        intent.putExtra("UID",id.getText().toString());
+        startActivity(intent);
+        finish();
+
+
+
     }
 
     public void SellFromList(View view) {
