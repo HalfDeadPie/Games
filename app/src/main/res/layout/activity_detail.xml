@@ -69,7 +69,8 @@
                 android:minHeight="220px"
                 android:minWidth="220px"
                 android:foregroundGravity="top|center_horizontal"
-                android:scaleType="fitStart"/>/>
+                android:scaleType="fitStart"
+                android:onClick="showImage" />/>
 
             <TextView
                 android:id="@+id/textView2"

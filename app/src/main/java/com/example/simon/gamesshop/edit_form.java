@@ -40,10 +40,10 @@ public class edit_form extends AppCompatActivity {
     public void sendEdit(View view){
         Connector con = new Connector(this);
         TextView idView = (TextView) findViewById(R.id.edit_form_uid);
-        System.out.println("očakavana chyba:"+idView);
+
         String id = idView.getText().toString();
         con.execute("SENDEDIT",id);
-
+    /*
         TextView detail_description = (TextView) findViewById(R.id.edit_form_decription);
         TextView detail_name = (TextView) findViewById(R.id.edit_form_title);
         TextView detail_image = (TextView) findViewById(R.id.edit_form_image);
@@ -73,6 +73,7 @@ public class edit_form extends AppCompatActivity {
         RadioButton p3 = (RadioButton) findViewById(R.id.radioButton2_Wii);
         RadioButton p4 = (RadioButton) findViewById(R.id.radioButton5PS4);
         RadioButton p5 = (RadioButton) findViewById(R.id.radioButton6360);
+        */
 
     }
 }

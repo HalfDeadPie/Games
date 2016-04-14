@@ -1,6 +1,8 @@
 package com.example.simon.gamesshop;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -117,6 +119,7 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
         TextView detail_count = (TextView) activity.findViewById(R.id.edit_form_count);
         TextView detail_producer = (TextView) activity.findViewById(R.id.edit_form_producer);
         TextView detail_language = (TextView) activity.findViewById(R.id.edit_form_languages);
+        TextView detail_uid = (TextView) activity.findViewById(R.id.edit_form_uid);
 
         Game g = new Game();
         g.setName(detail_name.getText().toString());
@@ -131,6 +134,7 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
         g.setLanguage(detail_language.getText().toString());
         g.setGenre(GenreID);
         g.setPlatform(PlatformID);
+        g.setUID(detail_uid.getText().toString());
 
         send(g);
         // pridat zostavenie jsonu a poslanie
@@ -140,8 +144,9 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
 
     private void send(Game g){
         try {
-            URL url = new URL(ourURL+"/"+ID);
-            System.out.println(url);
+            String UID = g.getUID();
+            URL url = new URL(ourURL+"/"+UID);
+            System.out.println("ID pri odoslani:" + UID);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
             connection.addRequestProperty("application-id", "94B456C3-9A44-D044-FF87-A1D0AA589D00");
@@ -178,6 +183,27 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
             out.flush();
             out.close();
             System.out.println("Edit form response:"+connection.getResponseCode());
+            if(connection.getResponseCode() == 200){
+                // go back
+                /*
+                // nefunguje to
+                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(activity);
+                dlgAlert.setMessage("Uspesne odoslane!");
+                dlgAlert.setTitle("OK!");
+                dlgAlert.setCancelable(true);
+                dlgAlert.create().show();
+                activity.startActivity(new Intent(activity,MainActivity.class));
+                activity.finish();
+                */
+            }else{
+                /*
+                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(activity);
+                dlgAlert.setMessage("Problem s odoslanim!");
+                dlgAlert.setTitle("Error!");
+                dlgAlert.setCancelable(true);
+                dlgAlert.create().show();
+                */
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -228,12 +254,12 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
                 count++;
                 URL url = new URL(ourURL+"/"+UID);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setDoOutput(true);
+                connection.setRequestMethod("PUT");
 
                 connection.addRequestProperty("application-id", "94B456C3-9A44-D044-FF87-A1D0AA589D00");
                 connection.addRequestProperty("secret-key", "CDA1E692-BF29-7396-FF7F-0E699E669000");
-                connection.addRequestProperty("application-type", "REST");
                 connection.setRequestProperty("Content-Type", "application/json");
-                connection.setRequestProperty("Accept", "application/json");
 
                 //tu zostavím json
                 String json = "";
@@ -243,14 +269,12 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
                 json = jsonObject.toString();
 
                 //tu by sa to malo odoslať
-                connection.setDoOutput(true);
-                connection.setRequestMethod("PUT");
-                OutputStreamWriter out = new OutputStreamWriter(
-                        connection.getOutputStream());
+
+                OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
                 out.write(json);
                 out.flush();
                 out.close();
-                System.out.println("Response:"+connection.getResponseCode());
+                System.out.println("Response:" + connection.getResponseCode());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -355,7 +379,7 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
         TextView detail_count = (TextView) activity.findViewById(R.id.edit_form_count);
         TextView detail_producer = (TextView) activity.findViewById(R.id.edit_form_producer);
         TextView detail_language = (TextView) activity.findViewById(R.id.edit_form_languages);
-        TextView uid = (TextView) activity.findViewById(R.id.uid);
+        TextView uid = (TextView) activity.findViewById(R.id.edit_form_uid);
 
         RadioButton g0 = (RadioButton) activity.findViewById(R.id.radioButtonAction);
         RadioButton g1 = (RadioButton) activity.findViewById(R.id.radioButtonAdventure);
@@ -383,9 +407,9 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
 
         //detail_image.setImageBitmap(g.getCoverImage());
        // detail_pegi.setText(g.getPegi());
-
-        detail_rating.setText(Integer.toString(g.getRating()) + "%");
-        detail_price.setText(Integer.toString(g.getPrice()) + " €");
+        uid.setText(g.getUID());
+        detail_rating.setText(Integer.toString(g.getRating()));
+        detail_price.setText(Integer.toString(g.getPrice()));
         detail_description.setText(g.getDescription());
         detail_count.setText(Integer.toString(g.getCount()));
         detail_date.setText(g.getReleaseDate());
@@ -485,7 +509,6 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
         TextView detail_id = (TextView) activity.findViewById(R.id.detail_id);
 
 
-
         detail_name.setText(g.getName());
         detail_image.setImageBitmap(g.getCoverImage());
         detail_pegi.setText(g.getPegi());
@@ -502,78 +525,6 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
         detail_language.setText(g.getLanguage());
         detail_platform.setText(Integer.toString(g.getPlatform()));
         detail_id.setText(g.getUID());
-    }
-
-
-
-
-    public static String httpGet(String ID) throws IOException {
-        ID = "267FBCE3-25CF-DC4E-FF67-B9311AE18E00";
-        URL url = new URL(ourURL+"/"+ID);
-        HttpURLConnection conn =(HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("GET");
-        conn.setRequestProperty("Accept", "application/json");
-        conn.addRequestProperty("application-id", "94B456C3-9A44-D044-FF87-A1D0AA589D00");
-        conn.addRequestProperty("secret-key", "CDA1E692-BF29-7396-FF7F-0E699E669000");
-
-        if (conn.getResponseCode() != 200) {
-            throw new RuntimeException("Failed : HTTP error code : "
-                    + conn.getResponseCode());
-        }
-
-        // Buffer the result into a string
-        BufferedReader rd = new BufferedReader(new InputStreamReader((conn.getInputStream())));
-        StringBuilder sb = new StringBuilder();
-        String line;
-        while ((line = rd.readLine()) != null) {
-            sb.append(line);
-        }
-        conn.disconnect();
-        rd.close();
-
-        conn.disconnect();
-        return sb.toString();
-    }
-
-    public static String httpPost(String urlStr, String[] paramName,String[] paramVal) throws Exception {
-        URL url = new URL(urlStr);
-        HttpURLConnection conn =(HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("POST");
-        conn.setDoOutput(true);
-        conn.setDoInput(true);
-        conn.setUseCaches(false);
-        conn.setAllowUserInteraction(false);
-        conn.setRequestProperty("Content-Type",
-                "application/x-www-form-urlencoded");
-
-        // Create the form content
-        OutputStream out = conn.getOutputStream();
-        Writer writer = new OutputStreamWriter(out, "UTF-8");
-        for (int i = 0; i < paramName.length; i++) {
-            writer.write(paramName[i]);
-            writer.write("=");
-            writer.write(URLEncoder.encode(paramVal[i], "UTF-8"));
-            writer.write("&");
-        }
-        writer.close();
-        out.close();
-
-        if (conn.getResponseCode() != 200) {
-            throw new IOException(conn.getResponseMessage());
-        }
-
-        // Buffer the result into a string
-        BufferedReader rd = new BufferedReader(
-                new InputStreamReader(conn.getInputStream()));
-        StringBuilder sb = new StringBuilder();
-        String line;
-        while ((line = rd.readLine()) != null) {
-            sb.append(line);
-        }
-        rd.close();
-
-        conn.disconnect();
-        return sb.toString();
     }
 
     private Bitmap image(String link) {
