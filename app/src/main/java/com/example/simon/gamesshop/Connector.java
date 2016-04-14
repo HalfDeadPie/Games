@@ -56,6 +56,7 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
     @Override
     protected ArrayList<Game> doInBackground(String... params) {//vykonavanie v pozadí
 
+        System.out.println("Background parameter 1:"+params[0]);
         //1. FUNKCIA VYTVORÍ ZOZNAM ZO VŠETKÝCH HIER
         if(params[0].equals("GETALL")){
             aktivita = 1;   // v onPost spustame if ktory nastavi mainobrazovku
@@ -88,6 +89,10 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
             aktivita = 6;
             System.out.println("(EXECUTE)UID:"+params[1]+" COUNT:"+params[2]);
             Sell(params[1],Integer.parseInt(params[2]));
+        }
+        else if(params[0].equals("DEL")){
+            aktivita = 7;
+            Delete(params[1]);
         }
         return null;
     }
@@ -222,6 +227,31 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
         }
     }
 
+    private void Delete(String UID){
+        try {
+            URL url = new URL(ourURL+"/"+UID);
+            System.out.println("DELETE:" + url);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.addRequestProperty("application-id", "94B456C3-9A44-D044-FF87-A1D0AA589D00");
+            connection.addRequestProperty("secret-key", "CDA1E692-BF29-7396-FF7F-0E699E669000");
+            connection.addRequestProperty("application-type", "REST");
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setAllowUserInteraction(false);
+            connection.setInstanceFollowRedirects(true);
+            connection.setRequestMethod("DELETE");
+            connection.connect();
+            JSONObject jsonObject = new JSONObject();
+            String json = jsonObject.toString();
+            OutputStreamWriter send = new OutputStreamWriter(connection.getOutputStream());
+            send.write(json);
+            send.flush();
+            send.close();
+            System.out.println("Delete response:"+connection.getResponseCode());
+            connection.connect();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     private void Buy(String UID, int count){
             // Create a new HttpClient and Post Header
             try {
@@ -333,6 +363,9 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
             Loading.dismiss();
         }
         else if(aktivita == 6){//Sell() - dekrementovanie hodnoty počtu kusov
+            Loading.dismiss();
+        }
+        else if(aktivita == 7){
             Loading.dismiss();
         }
 

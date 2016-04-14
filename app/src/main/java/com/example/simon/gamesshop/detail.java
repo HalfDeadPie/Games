@@ -2,6 +2,7 @@ package com.example.simon.gamesshop;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -38,9 +39,9 @@ public class detail extends AppCompatActivity {
         String gameId = myIntent.getStringExtra("UID");
         GetDetail(gameId);
     }
+
     @Override
-    public void onBackPressed()
-    {
+    public void onBackPressed() {
         //ProgressDialog Loading = ProgressDialog.show(detail.this, "", "Loading. Please wait...", true);
         super.onBackPressed();
         startActivity(new Intent(this, MainActivity.class));
@@ -53,7 +54,7 @@ public class detail extends AppCompatActivity {
         con.execute("GETDETAIL", ID);
     }
 
-    protected Bitmap getImage(String link){
+    protected Bitmap getImage(String link) {
         Bitmap b = null;
         AsyncTask<String, String, Bitmap> img = new Image();
         img.execute(link);
@@ -67,7 +68,7 @@ public class detail extends AppCompatActivity {
         return null;
     }
 
-    public Game ListParser(JSONObject JG, Game SG){
+    public Game ListParser(JSONObject JG, Game SG) {
         try {
             SG.setName(JG.getString("name"));
             SG.setDescription(JG.getString("description"));
@@ -95,7 +96,7 @@ public class detail extends AppCompatActivity {
         TextView idView = (TextView) findViewById(R.id.detail_id);
         String ID = idView.getText().toString();
 
-        System.out.println("DETAILBUY:ID:"+ID+"  Count:"+count);
+        System.out.println("DETAILBUY:ID:" + ID + "  Count:" + count);
 
         Connector con = new Connector(this);
         con.execute("BUY", ID, count);
@@ -117,7 +118,7 @@ public class detail extends AppCompatActivity {
         TextView idView = (TextView) findViewById(R.id.detail_id);
         String ID = idView.getText().toString();
 
-        System.out.println("DETAILSELL:ID:"+ID+"  Count:"+count);
+        System.out.println("DETAILSELL:ID:" + ID + "  Count:" + count);
 
         int control = Integer.parseInt(count);
         if (control > 0) {
@@ -132,10 +133,11 @@ public class detail extends AppCompatActivity {
             sb.append(decremented);
             String incString = sb.toString();
             countView.setText(incString);
+            System.out.println("Detail derecremented:" + decremented);
             if (decremented == 0) {
                 countView.setTextColor(Color.RED);
             } else {
-                countView.setTextColor(Color.WHITE);
+                countView.setTextColor(Color.BLACK);
             }
         } else {
             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(this);
@@ -145,4 +147,15 @@ public class detail extends AppCompatActivity {
             dlgAlert.create().show();
         }
     }
+
+    public void Delete(View view) {
+        // ziska UID zaznamu a spusti novu aktivitu s tymto UID
+        TextView idView = (TextView) findViewById(R.id.detail_id);
+        String ID = idView.getText().toString();
+        System.out.println("DETAILDEL:ID:" + ID);
+        Connector con = new Connector(this);
+        con.execute("DEL", ID);
+        onBackPressed();
+    }
+
 }

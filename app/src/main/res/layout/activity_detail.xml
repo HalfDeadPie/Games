@@ -226,7 +226,8 @@
                 android:layout_alignBaseline="@+id/detail_sell"
                 android:layout_alignBottom="@+id/detail_sell"
                 android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
+                android:layout_alignParentEnd="true"
+                android:onClick="Delete"/>
 
             <TextView
                 android:id="@+id/textView8"
