@@ -1,15 +1,20 @@
 package com.example.simon.gamesshop;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -43,60 +48,9 @@ public class detail extends AppCompatActivity {
     }
 
     public void GetDetail(String ID) {
-
         Connector con = new Connector(this);
         //System.out.println(ID);
         con.execute("GETDETAIL", ID);
-        /*
-        try {
-           // Json = (String) con.get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-
-        Game g = new Game();
-        JSONObject jo = null;
-        try {
-            jo = new JSONObject(Json);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        ListParser(jo, g);
-        setDetail(g);
-        */
-    }
-
-    protected void setDetail(Game g){
-
-        TextView detail_description = (TextView) findViewById(R.id.detail_description);
-        TextView detail_name = (TextView) findViewById(R.id.detail_name);
-        ImageView detail_image = (ImageView) findViewById(R.id.detail_image);
-        TextView detail_pegi = (TextView) findViewById(R.id.detail_pegi);
-        TextView detail_rating = (TextView) findViewById(R.id.detail_rating);
-        TextView detail_price = (TextView) findViewById(R.id.detail_price);
-        TextView detail_date = (TextView) findViewById(R.id.detail_date);
-        TextView detail_count = (TextView) findViewById(R.id.detail_count);
-        TextView detail_producer = (TextView) findViewById(R.id.detail_producer);
-        TextView detail_genre = (TextView) findViewById(R.id.detail_genre);
-        TextView detail_language = (TextView) findViewById(R.id.detail_language);
-        TextView detail_platform = (TextView) findViewById(R.id.detail_platform);
-
-
-
-        detail_name.setText(g.getName());
-        detail_image.setImageBitmap(getImage(g.getImage()));
-        detail_pegi.setText(g.getPegi());
-        detail_rating.setText(Integer.toString(g.getRating())+"%");
-        detail_price.setText(Integer.toString(g.getPrice())+" €");
-        detail_description.setText(g.getDescription());
-        detail_count.setText(Integer.toString(g.getCount()));
-        detail_date.setText(g.getReleaseDate());
-        detail_producer.setText(g.getProducer());
-        detail_genre.setText(Integer.toString(g.getGenre()));
-        detail_language.setText(g.getLanguage());
-        detail_platform.setText(Integer.toString(g.getPlatform()));
     }
 
     protected Bitmap getImage(String link){
@@ -132,5 +86,63 @@ public class detail extends AppCompatActivity {
             Log.d("JSON", "Chyba pri parsovaní!");
         }
         return SG;
+    }
+
+    public void BuyFromList(View view) {
+        // ziska UID zaznamu a spusti novu aktivitu s tymto UID
+        TextView countView = (TextView) findViewById(R.id.detail_count);
+        String count = countView.getText().toString();
+        TextView idView = (TextView) findViewById(R.id.detail_id);
+        String ID = idView.getText().toString();
+
+        System.out.println("DETAILBUY:ID:"+ID+"  Count:"+count);
+
+        Connector con = new Connector(this);
+        con.execute("BUY", ID, count);
+
+        int incremented = Integer.parseInt(count);
+        incremented++;
+        StringBuilder sb = new StringBuilder();
+        sb.append("");
+        sb.append(incremented);
+        String incString = sb.toString();
+        countView.setText(incString);
+        countView.setTextColor(Color.BLACK);
+    }
+
+    public void SellFromList(View view) {
+        // ziska UID zaznamu a spusti novu aktivitu s tymto UID
+        TextView countView = (TextView) findViewById(R.id.detail_count);
+        String count = countView.getText().toString();
+        TextView idView = (TextView) findViewById(R.id.detail_id);
+        String ID = idView.getText().toString();
+
+        System.out.println("DETAILSELL:ID:"+ID+"  Count:"+count);
+
+        int control = Integer.parseInt(count);
+        if (control > 0) {
+
+            Connector con = new Connector(this);
+            con.execute("SELL", ID, count);
+
+            int decremented = Integer.parseInt(count);
+            decremented--;
+            StringBuilder sb = new StringBuilder();
+            sb.append("");
+            sb.append(decremented);
+            String incString = sb.toString();
+            countView.setText(incString);
+            if (decremented == 0) {
+                countView.setTextColor(Color.RED);
+            } else {
+                countView.setTextColor(Color.WHITE);
+            }
+        } else {
+            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(this);
+            dlgAlert.setMessage("You are not able to sell this game!");
+            dlgAlert.setTitle("Error!");
+            dlgAlert.setCancelable(true);
+            dlgAlert.create().show();
+        }
     }
 }
