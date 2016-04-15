@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -49,6 +50,7 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
     private static final String ourURL ="https://api.backendless.com/v1/data/Game";
     private int aktivita;   // 1 - getAll() 2-getDetail()   3-getEdit()     4-sendEdit();
     private String ID;
+    private Connector Connector = this;
     @Override
     protected void onPreExecute() {//pred vykonaním doInBackground načíta a zobrazí loader
         super.onPreExecute();
@@ -61,14 +63,10 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
         System.out.println("Background parameter 1:"+params[0]);
         //1. FUNKCIA VYTVORÍ ZOZNAM ZO VŠETKÝCH HIER
         if(params[0].equals("GETALL")){
+            System.out.println("GETALL");
             aktivita = 1;   // v onPost spustame if ktory nastavi mainobrazovku
             return getAll();
-            //2. FUNKCIA NA PRIDANIE ZÁZNAMU O HRE
         }else if(params[0].equals("POST")){
-
-            //3. FUNKCIA NA ZMAZANIE ZÁZNAMU O HRE
-        }else if(params[0].equals("DELETE")){
-            //4. FUNKCIA, KTORA ZOBRAZÍ DETAILNÝ ZÁZNAM O HRE
         }else if(params[0].equals("GETDETAIL")){
             aktivita = 2;   // v onPost spustame if ktoy nastavi detail obrazovku
             return getDetail(params[1]);
@@ -90,7 +88,7 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
         else if(params[0].equals("SELL")){
             aktivita = 6;
             System.out.println("(EXECUTE)UID:"+params[1]+" COUNT:"+params[2]);
-            Sell(params[1],Integer.parseInt(params[2]));
+            Sell(params[1], Integer.parseInt(params[2]));
         }
         else if(params[0].equals("DEL")){
             aktivita = 7;
@@ -272,7 +270,7 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
             send.write(json);
             send.flush();
             send.close();
-            System.out.println("Delete response:"+connection.getResponseCode());
+            System.out.println("Delete response:" + connection.getResponseCode());
             connection.connect();
         } catch (Exception e) {
             e.printStackTrace();
@@ -518,10 +516,21 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
             Counts[i] = GameList.get(i).getCount();
             Images[i]= GameList.get(i).getCoverImage();
             String ID = GameList.get(i).getUID();
-            // System.out.println("Nastavuje hre[" + i + "] ID: " +ID);
             UIDs[i] = ID;
         }
         viewGL.setAdapter(new CustomAdapter(activity, Names, Counts, Images, UIDs));
+        final SwipeRefreshLayout Refresh = (SwipeRefreshLayout)activity.findViewById(R.id.swiperefresh);
+
+        Refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Refresh.setRefreshing(false);
+                System.out.println("Refreshing...");
+                Intent intent = new Intent(activity, MainActivity.class);
+                activity.startActivity(intent);
+                activity.finish();
+            }
+        });
     }
 
     protected void setDetail(Game g){
