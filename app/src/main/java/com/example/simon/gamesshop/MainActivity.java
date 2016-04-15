@@ -19,6 +19,8 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import com.melnykov.fab.FloatingActionButton;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,6 +37,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         GetAll();
+
+        ListView listView = (ListView) findViewById(R.id.viewGL);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.attachToListView(listView);
+        fab.setType(FloatingActionButton.TYPE_NORMAL);
+        fab.setColorNormal(getResources().getColor(android.R.color.holo_red_light));
+        fab.setColorPressed(getResources().getColor(android.R.color.white));
+        fab.setShadow(true);
+        fab.show();
+        fab.hide();
+        fab.setColorRipple(getResources().getColor(R.color.material_blue_500));
+        // dorobit onclick listener
     }
 
     public void GetAll() {
