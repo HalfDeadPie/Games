@@ -47,8 +47,6 @@ public class MainActivity extends AppCompatActivity {
         fab.setColorNormal(getResources().getColor(android.R.color.holo_red_light));
         fab.setColorPressed(getResources().getColor(android.R.color.white));
         fab.setShadow(true);
-        fab.show();
-        fab.hide();
         fab.setColorRipple(getResources().getColor(R.color.material_blue_500));
         // dorobit onclick listener
     }
