@@ -20,7 +20,10 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
-import com.melnykov.fab.FloatingActionButton;
+//import com.melnykov.fab.FloatingActionButton;
+
+import com.shamanland.fab.FloatingActionButton;
+import com.shamanland.fab.ShowHideOnScroll;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,12 +45,17 @@ public class MainActivity extends AppCompatActivity {
 
         ListView listView = (ListView) findViewById(R.id.viewGL);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.attachToListView(listView);
-        fab.setType(FloatingActionButton.TYPE_NORMAL);
-        fab.setColorNormal(getResources().getColor(android.R.color.holo_red_light));
-        fab.setColorPressed(getResources().getColor(android.R.color.white));
-        fab.setShadow(true);
-        fab.setColorRipple(getResources().getColor(R.color.material_blue_500));
+        //listView.setOnTouchListener(new ShowHideOnScroll(fab, R.anim.floating_action_button_show, R.anim.floating_action_button_hide));
+        fab.setColor(R.color.colorAccent);
+
+        //fab.attachToListView(listView);
+       // fab.setType(FloatingActionButton.TYPE_MINI);
+        //fab.show(false);
+        //fab.hide(false);
+        //fab.setColorNormal(getResources().getColor(android.R.color.holo_red_light));
+        //fab.setColorPressed(getResources().getColor(android.R.color.white));
+        //fab.setShadow(true);
+        //fab.setColorRipple(getResources().getColor(R.color.material_blue_500));
         // dorobit onclick listener
     }
 
@@ -57,6 +65,20 @@ public class MainActivity extends AppCompatActivity {
         Connector con = new Connector(this);
 
         con.execute("GETALL");
+    }
+
+    public void logOut(View view){
+        Intent intent = new Intent(this, Login.class);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        Intent intent = new Intent(this, Login.class);
+        startActivity(intent);
+        finish();
     }
 
     //Z json stringu zadaného ako argument vráti zoznam hier triedy Game zadaný ako argument

@@ -2,13 +2,19 @@ package com.example.simon.gamesshop;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.net.InetAddress;
 
 public class Login extends AppCompatActivity {
 
@@ -19,6 +25,10 @@ public class Login extends AppCompatActivity {
     }
 
     public void Logged (){
+       // boolean a = isInternetOn();
+        // snaha o overenie internetoveho pripojenia.. zatial nefunguje
+        //System.out.println(a);
+
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
@@ -51,4 +61,33 @@ public class Login extends AppCompatActivity {
 
         }
     }
+
+    public final boolean isInternetOn() {
+
+        // get Connectivity Manager object to check connection
+        ConnectivityManager connec =
+                (ConnectivityManager)getSystemService(getBaseContext().CONNECTIVITY_SERVICE);
+
+        // Check for network connections
+        if ( connec.getNetworkInfo(0).getState() == android.net.NetworkInfo.State.CONNECTED ||
+                connec.getNetworkInfo(0).getState() == android.net.NetworkInfo.State.CONNECTING ||
+                connec.getNetworkInfo(1).getState() == android.net.NetworkInfo.State.CONNECTING ||
+                connec.getNetworkInfo(1).getState() == android.net.NetworkInfo.State.CONNECTED ) {
+
+            // if connected with internet
+
+            Toast.makeText(this, " Connected ", Toast.LENGTH_LONG).show();
+            return true;
+
+        } else if (
+                connec.getNetworkInfo(0).getState() == android.net.NetworkInfo.State.DISCONNECTED ||
+                        connec.getNetworkInfo(1).getState() == android.net.NetworkInfo.State.DISCONNECTED  ) {
+
+            Toast.makeText(this, " Not Connected ", Toast.LENGTH_LONG).show();
+            return false;
+        }
+        return false;
+    }
+
+
 }

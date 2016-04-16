@@ -2,10 +2,13 @@ package com.example.simon.gamesshop;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -31,6 +34,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.io.Writer;
 import java.net.HttpURLConnection;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -59,6 +63,7 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
 
     @Override
     protected ArrayList<Game> doInBackground(String... params) {//vykonavanie v pozadí
+
 
         System.out.println("Background parameter 1:"+params[0]);
         //1. FUNKCIA VYTVORÍ ZOZNAM ZO VŠETKÝCH HIER
@@ -96,6 +101,7 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
         }
         return null;
     }
+
 
     private ArrayList<Game> sendEdit() {
 
