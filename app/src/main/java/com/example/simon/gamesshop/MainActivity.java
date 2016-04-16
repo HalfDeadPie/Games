@@ -2,11 +2,17 @@ package com.example.simon.gamesshop;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -34,7 +40,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setColor(R.color.colorAccent);
 
         //fab.attachToListView(listView);
-       // fab.setType(FloatingActionButton.TYPE_MINI);
+        // fab.setType(FloatingActionButton.TYPE_MINI);
         //fab.show(false);
         //fab.hide(false);
         //fab.setColorNormal(getResources().getColor(android.R.color.holo_red_light));
@@ -57,25 +64,78 @@ public class MainActivity extends AppCompatActivity {
         //fab.setShadow(true);
         //fab.setColorRipple(getResources().getColor(R.color.material_blue_500));
         // dorobit onclick listener
+
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        swipeRefreshLayout.setRefreshing(true);
+                                        GetAll();
+                                    }
+                                }
+        );
+    }
+
+    public boolean isConnectedToInternet() {
+        ConnectivityManager connectivity = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivity != null) {
+            NetworkInfo[] info = connectivity.getAllNetworkInfo();
+            if (info != null)
+                for (int i = 0; i < info.length; i++)
+                    if (info[i].getState() == NetworkInfo.State.CONNECTED) {
+                        return true;
+                    }
+
+        }
+        return false;
+    }
+
+    public void onRefresh() {
+        GetAll();
     }
 
     public void GetAll() {
-        String Json = "";
-        ArrayList<Game> GameList = new ArrayList<Game>();
-        Connector con = new Connector(this);
-
-        con.execute("GETALL");
+        if (isConnectedToInternet()) {
+            swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+            swipeRefreshLayout.setRefreshing(true);
+            String Json = "";
+            ArrayList<Game> GameList = new ArrayList<Game>();
+            Connector con = new Connector(this);
+            con.execute("GETALL");
+            swipeRefreshLayout.setRefreshing(false);
+        } else {
+            makeAndShowDialogBox().show();
+        }
     }
 
-    public void logOut(View view){
+    private AlertDialog makeAndShowDialogBox() {
+        AlertDialog myQuittingDialogBox = new AlertDialog.Builder(this)
+                .setCancelable(false)
+                .setTitle("Lost connection")
+                .setMessage("You have lost your connection!")
+                .setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        GetAll();
+                    }
+                })//setPositiveButton
+                .setNegativeButton("Exit", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        finish();
+                    }
+                })//setNegativeButton
+                .create();
+        return myQuittingDialogBox;
+    }
+
+    public void logOut(View view) {
         Intent intent = new Intent(this, Login.class);
         startActivity(intent);
         finish();
     }
 
     @Override
-    public void onBackPressed()
-    {
+    public void onBackPressed() {
         Intent intent = new Intent(this, Login.class);
         startActivity(intent);
         finish();
@@ -120,21 +180,25 @@ public class MainActivity extends AppCompatActivity {
 
     // po kliknuti n obrazok/ nazov hry sa pusti kod na zobrazenie detailu konkretnej hry
     public void toDetail(View view) {
-        // ziska UID zaznamu a spusti novu aktivitu s tymto UID
+        if (isConnectedToInternet()) {
+            // ziska UID zaznamu a spusti novu aktivitu s tymto UID
 
-        ViewGroup row = (ViewGroup) view.getParent();               // rodic
-        //System.out.println(row);
-        LinearLayout lay = (LinearLayout) row.findViewById(R.id.layout);
-        //System.out.println(lay);
-        TextView textView = (TextView) lay.findViewById(R.id.uid);  // dieta (skryty textview obsahujuci UID)
-        //System.out.println(textView);
-        String ID = textView.getText().toString();                  // z dietata nacitame UID
+            ViewGroup row = (ViewGroup) view.getParent();               // rodic
+            //System.out.println(row);
+            LinearLayout lay = (LinearLayout) row.findViewById(R.id.layout);
+            //System.out.println(lay);
+            TextView textView = (TextView) lay.findViewById(R.id.uid);  // dieta (skryty textview obsahujuci UID)
+            //System.out.println(textView);
+            String ID = textView.getText().toString();                  // z dietata nacitame UID
 
-        //ProgressDialog Loading = ProgressDialog.show(MainActivity.this, "", "Loading. Please wait...", true);
-        Intent intent = new Intent(this, detail.class);
-        intent.putExtra("UID", ID);//Put your id to your next Intent
-        startActivity(intent);
-        finish();
+            //ProgressDialog Loading = ProgressDialog.show(MainActivity.this, "", "Loading. Please wait...", true);
+            Intent intent = new Intent(this, detail.class);
+            intent.putExtra("UID", ID);//Put your id to your next Intent
+            startActivity(intent);
+            finish();
+        } else {
+            makeAndShowDialogBox().show();
+        }
     }
 
     public void sell(View view) {
@@ -212,7 +276,7 @@ public class MainActivity extends AppCompatActivity {
         sb.append(incremented);
         String incString = sb.toString();
         textView2.setText(incString);
-        textView2.setTextColor(Color.WHITE);
+        textView2.setTextColor(Color.BLACK);
     }
 
     public void SellFromList(View view) {
@@ -239,15 +303,12 @@ public class MainActivity extends AppCompatActivity {
             sb.append(decremented);
             String incString = sb.toString();
             textView2.setText(incString);
-            if(decremented==0){
+            if (decremented == 0) {
                 textView2.setTextColor(Color.RED);
+            } else {
+                textView2.setTextColor(Color.BLACK);
             }
-            else{
-                textView2.setTextColor(Color.WHITE);
-            }
-        }
-        else
-        {
+        } else {
             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(this);
             dlgAlert.setMessage("You are not able to sell this game!");
             dlgAlert.setTitle("Error!");

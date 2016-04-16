@@ -123,9 +123,6 @@ public class detail extends AppCompatActivity {
         intent.putExtra("UID",id.getText().toString());
         startActivity(intent);
         finish();
-
-
-
     }
 
     public void SellFromList(View view) {

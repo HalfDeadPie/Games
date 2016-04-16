@@ -40,6 +40,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by simon on 17.3.2016.
@@ -525,18 +526,6 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
             UIDs[i] = ID;
         }
         viewGL.setAdapter(new CustomAdapter(activity, Names, Counts, Images, UIDs));
-        final SwipeRefreshLayout Refresh = (SwipeRefreshLayout)activity.findViewById(R.id.swiperefresh);
-
-        Refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                Refresh.setRefreshing(false);
-                System.out.println("Refreshing...");
-                Intent intent = new Intent(activity, MainActivity.class);
-                activity.startActivity(intent);
-                activity.finish();
-            }
-        });
     }
 
     protected void setDetail(Game g){
@@ -560,8 +549,8 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
         detail_name.setText(g.getName());
         detail_image.setImageBitmap(g.getCoverImage());
         detail_pegi.setText(g.getPegi());
-        detail_rating.setText(Integer.toString(g.getRating()));
-        detail_price.setText(Integer.toString(g.getPrice()));
+        detail_rating.setText(Integer.toString(g.getRating())+"%");
+        detail_price.setText(Integer.toString(g.getPrice())+"€");
         detail_description.setText(g.getDescription());
         detail_count.setText(Integer.toString(g.getCount()));
         if(g.getCount()==0){
@@ -569,9 +558,27 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
         }
         detail_date.setText(g.getReleaseDate());
         detail_producer.setText(g.getProducer());
-        detail_genre.setText(Integer.toString(g.getGenre()));
+        switch(g.getGenre()){
+            case 0: detail_genre.setText("Action");break;
+            case 1: detail_genre.setText("Adventure");break;
+            case 2: detail_genre.setText("Casual");break;
+            case 3: detail_genre.setText("Indie");break;
+            case 4: detail_genre.setText("Massive Multiplayer");break;
+            case 5: detail_genre.setText("Racing");break;
+            case 6: detail_genre.setText("RPG");break;
+            case 7: detail_genre.setText("Simulation");break;
+            case 8: detail_genre.setText("Sports");break;
+            case 9: detail_genre.setText("Strategy");break;
+        }
         detail_language.setText(g.getLanguage());
-        detail_platform.setText(Integer.toString(g.getPlatform()));
+        switch(g.getPlatform()){
+            case 0: detail_platform.setText("PC");break;
+            case 1: detail_platform.setText("PS3");break;
+            case 2: detail_platform.setText("PS4");break;
+            case 3: detail_platform.setText("XBOX ONE");break;
+            case 4: detail_platform.setText("XBOX 360");break;
+            case 5: detail_platform.setText("Nintendo Wii");break;
+        }
         detail_id.setText(g.getUID());
     }
 
