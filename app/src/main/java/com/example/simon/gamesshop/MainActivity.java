@@ -90,8 +90,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                     }
 
         }
-        return true;// zakomentovat
-        //return false;
+        //return true;// zakomentovat
+        return false;
     }
 
     public void onRefresh() {
