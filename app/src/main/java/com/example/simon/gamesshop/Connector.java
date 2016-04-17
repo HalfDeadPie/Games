@@ -39,6 +39,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -66,7 +68,7 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
     protected ArrayList<Game> doInBackground(String... params) {//vykonavanie v pozadí
 
 
-        System.out.println("Background parameter 1:"+params[0]);
+        System.out.println("Background parameter 1:" + params[0]);
         //1. FUNKCIA VYTVORÍ ZOZNAM ZO VŠETKÝCH HIER
         if(params[0].equals("GETALL")){
             System.out.println("GETALL");
@@ -131,6 +133,7 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
         TextView detail_language = (TextView) activity.findViewById(R.id.edit_form_languages);
         TextView detail_uid = (TextView) activity.findViewById(R.id.edit_form_uid);
 
+
         Game g = new Game();
         g.setName(detail_name.getText().toString());
         g.setDescription(detail_description.getText().toString());
@@ -146,11 +149,11 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
         g.setPlatform(PlatformID);
         g.setUID(detail_uid.getText().toString());
 
-        send(g);
-        // pridat zostavenie jsonu a poslanie
+            send(g);
 
         return null;
     }
+
 
     private void send(Game g){
         try {
@@ -193,26 +196,18 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
             out.flush();
             out.close();
             System.out.println("Edit form response:"+connection.getResponseCode());
-            if(connection.getResponseCode() == 200){
-                // go back
+            if(Integer.parseInt(String.valueOf(connection.getResponseCode())) == 200){
+                // v doInBackground nefunguje zobrazovanie alertov
                 /*
-                // nefunguje to
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(activity);
                 dlgAlert.setMessage("Uspesne odoslane!");
                 dlgAlert.setTitle("OK!");
                 dlgAlert.setCancelable(true);
                 dlgAlert.create().show();
+                */
                 activity.startActivity(new Intent(activity,MainActivity.class));
                 activity.finish();
-                */
-            }else{
-                /*
-                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(activity);
-                dlgAlert.setMessage("Problem s odoslanim!");
-                dlgAlert.setTitle("Error!");
-                dlgAlert.setCancelable(true);
-                dlgAlert.create().show();
-                */
+
             }
 
         } catch (Exception e) {
@@ -632,6 +627,8 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
 
     public Game ListParser(JSONObject JG, Game SG){
         try {
+
+
             SG.setName(JG.getString("name"));
             SG.setReleaseDate(JG.getString("release_date"));
             SG.setDescription(JG.getString("description"));

@@ -78,7 +78,9 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     }
 
     public boolean isConnectedToInternet() {
+
         ConnectivityManager connectivity = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+
         if (connectivity != null) {
             NetworkInfo[] info = connectivity.getAllNetworkInfo();
             if (info != null)
@@ -88,7 +90,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                     }
 
         }
-        return false;
+        return true;// zakomentovat
+        //return false;
     }
 
     public void onRefresh() {
