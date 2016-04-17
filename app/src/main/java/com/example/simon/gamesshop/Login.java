@@ -18,6 +18,9 @@ import java.net.InetAddress;
 
 public class Login extends AppCompatActivity {
 
+    private String USERNAME = "user";
+    private String PASSWORD = "password";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,10 +28,6 @@ public class Login extends AppCompatActivity {
     }
 
     public void Logged (){
-       // boolean a = isInternetOn();
-        // snaha o overenie internetoveho pripojenia.. zatial nefunguje
-        //System.out.println(a);
-
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
@@ -39,7 +38,7 @@ public class Login extends AppCompatActivity {
         TextView Login = (TextView) findViewById(R.id.login_name);
         TextView Password = (TextView) findViewById(R.id.login_passwd);
 
-        if ((Login.getText().toString().equals("")) && (Password.getText().toString().equals(""))) {
+        if ((Login.getText().toString().equals(USERNAME)) && (Password.getText().toString().equals(PASSWORD))) {
             Log.v("Login", "Login sucessful");
             //ProgressDialog Loading = ProgressDialog.show(Login.this, "", "Loading. Please wait...", true);
             Logged();
