@@ -427,10 +427,10 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
 
         RadioButton p0 = (RadioButton) activity.findViewById(R.id.radioButtonPC);
         RadioButton p1 = (RadioButton) activity.findViewById(R.id.radiobutton4PS3);
-        RadioButton p2 = (RadioButton) activity.findViewById(R.id.radioButton3ONE);
-        RadioButton p3 = (RadioButton) activity.findViewById(R.id.radioButton2_Wii);
-        RadioButton p4 = (RadioButton) activity.findViewById(R.id.radioButton5PS4);
-        RadioButton p5 = (RadioButton) activity.findViewById(R.id.radioButton6360);
+        RadioButton p2 = (RadioButton) activity.findViewById(R.id.radioButton5PS4);
+        RadioButton p3 = (RadioButton) activity.findViewById(R.id.radioButton3ONE);
+        RadioButton p4 = (RadioButton) activity.findViewById(R.id.radioButton6360);
+        RadioButton p5 = (RadioButton) activity.findViewById(R.id.radioButton2_Wii);
 
 
         detail_name.setText(g.getName());
