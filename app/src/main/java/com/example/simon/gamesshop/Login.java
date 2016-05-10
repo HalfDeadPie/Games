@@ -18,8 +18,8 @@ import java.net.InetAddress;
 
 public class Login extends AppCompatActivity {
 
-    private String USERNAME = "user";
-    private String PASSWORD = "password";
+    private String USERNAME = "";
+    private String PASSWORD = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -91,7 +91,12 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
         }
         //return true;// zakomentovat
-        return false;
+        return true;    // opravit pred odovzdanim
+    }
+
+    public void IOsend(View view){
+        IOConnector con = new IOConnector(this);
+        con.execute("POST");
     }
 
     public void onRefresh() {

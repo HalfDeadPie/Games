@@ -214,6 +214,7 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
             e.printStackTrace();
         }
     }
+
     private ArrayList<Game> getDetail(String ID) {
         ArrayList<Game> GameList = new ArrayList<Game>();
         System.out.println(ID);
@@ -278,6 +279,7 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
             e.printStackTrace();
         }
     }
+
     private void Buy(String UID, int count){
             // Create a new HttpClient and Post Header
             try {
@@ -309,6 +311,7 @@ public class Connector extends AsyncTask<String, String, ArrayList<Game>> {
                 e.printStackTrace();
             }
     }
+
     private void Sell(String UID, int count){
         // Create a new HttpClient and Post Header
         try {
