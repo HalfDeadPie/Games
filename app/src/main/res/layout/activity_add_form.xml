@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/add_form_scrollview" >>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/add_form_title"
+                android:layout_gravity="center_horizontal"
+                android:hint="Title"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/add_form_price"
+                android:layout_gravity="center_horizontal"
+                android:hint="Price"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/add_form_rating"
+                android:layout_gravity="center_horizontal"
+                android:hint="Rating"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/add_form_image"
+                android:layout_gravity="center_horizontal"
+                android:hint="Cover image URL"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/add_form_languages"
+                android:layout_gravity="center_horizontal"
+                android:hint="Languages"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/add_form_producer"
+                android:layout_gravity="center_horizontal"
+                android:hint="Producer"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/add_form_release"
+                android:layout_gravity="center_horizontal"
+                android:hint="Release date"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:ems="10"
+                android:id="@+id/add_form_decription"
+                android:hint="Description"/>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal">
+
+                <EditText
+                    android:layout_width="159dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/add_form_pegi"
+                    android:hint="Pegi" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/add_form_count"
+                    android:hint="Count"/>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Genre"
+                android:id="@+id/add_form_genres"
+                android:textSize="35dp" />
+
+
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:rowCount="5"
+                android:columnCount="2">
+                <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:id="@+id/add_form_groupGenre">
+
+
+                    <RadioButton
+                        android:layout_width="192dp"
+                        android:layout_height="wrap_content"
+                        android:text="Action"
+                        android:id="@+id/add_form_radioButtonAction"
+                        android:layout_row="0"
+                        android:layout_column="0"
+                        android:layout_columnSpan="2" />
+
+                    <RadioButton
+                        android:layout_width="192dp"
+                        android:layout_height="wrap_content"
+                        android:text="Adventure"
+                        android:id="@+id/add_form_radioButtonAdventure"
+                        android:layout_row="0"
+                        android:layout_column="1" />
+
+                    <RadioButton
+                        android:layout_width="192dp"
+                        android:layout_height="wrap_content"
+                        android:text="Casual"
+                        android:id="@+id/add_form_radioButtonCasual"
+                        android:layout_row="1"
+                        android:layout_column="0" />
+
+                    <RadioButton
+                        android:layout_width="192dp"
+                        android:layout_height="wrap_content"
+                        android:text="Indie"
+                        android:id="@+id/add_form_radioButtonIndie"
+                        android:layout_row="1"
+                        android:layout_column="1" />
+
+                    <RadioButton
+                        android:layout_width="192dp"
+                        android:layout_height="wrap_content"
+                        android:text="MM"
+                        android:id="@+id/add_form_radioButtonMM"
+                        android:layout_row="2"
+                        android:layout_column="0" />
+                    <RadioButton
+                        android:layout_width="192dp"
+                        android:layout_height="wrap_content"
+                        android:text="Racing"
+                        android:id="@+id/add_form_radioButtonRacing"
+                        android:layout_row="2"
+                        android:layout_column="1" />
+                    <RadioButton
+                        android:layout_width="192dp"
+                        android:layout_height="wrap_content"
+                        android:text="RPG"
+                        android:id="@+id/add_form_radioButtonRPG"
+                        android:layout_row="3"
+                        android:layout_column="0" />
+                    <RadioButton
+                        android:layout_width="192dp"
+                        android:layout_height="wrap_content"
+                        android:text="Simulation"
+                        android:id="@+id/add_form_radioButtonSimulation"
+                        android:layout_row="3"
+                        android:layout_column="1" />
+                    <RadioButton
+                        android:layout_width="192dp"
+                        android:layout_height="wrap_content"
+                        android:text="Sports"
+                        android:id="@+id/add_form_radioButtonSports"
+                        android:layout_row="4"
+                        android:layout_column="0" />
+                    <RadioButton
+                        android:layout_width="192dp"
+                        android:layout_height="wrap_content"
+                        android:text="Strategy"
+                        android:id="@+id/add_form_radioButtonStrategy"
+                        android:layout_row="4"
+                        android:layout_column="1" />
+                </RadioGroup>
+            </GridLayout>
+
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Platforms"
+                android:id="@+id/add_form_platforms_text"
+                android:textSize="35dp" />
+
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:foregroundGravity="center_horizontal"
+                android:rowCount="3"
+                android:columnCount="3"
+                android:layout_gravity="center_horizontal">
+
+                <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:id="@+id/add_form_groupPlatform">
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:text="PC"
+                        android:id="@+id/add_form_radioButtonPC"
+                        android:layout_row="0"
+                        android:layout_column="0"
+                        android:checked="false" />
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:text="PS3"
+                        android:layout_row="0"
+                        android:layout_column="1"
+                        android:checked="false"
+                        android:id="@+id/add_form_radiobutton4PS3" />
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="X BOX ONE"
+                        android:id="@+id/add_form_radioButton3ONE"
+                        android:layout_row="0"
+                        android:layout_column="2"
+                        android:checked="false"
+                        android:layout_gravity="left" />
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:text="Nintendo Wii"
+                        android:id="@+id/add_form_radioButton2_Wii"
+                        android:layout_row="1"
+                        android:layout_column="0"
+                        android:checked="false" />
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="PS4"
+                        android:id="@+id/add_form_radioButton5PS4"
+                        android:layout_row="1"
+                        android:layout_column="1"
+                        android:checked="false"
+                        android:layout_gravity="left" />
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="X BOX 360"
+                        android:id="@+id/add_form_radioButton6360"
+                        android:layout_row="1"
+                        android:layout_column="2"
+                        android:checked="false"
+                        android:layout_gravity="left" />
+                </RadioGroup>
+            </GridLayout>
+
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Odoslať"
+                android:id="@+id/add_form_sendbutton"
+                android:onClick="sendEdit" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/add_form_uid"
+                android:visibility="invisible"
+                android:enabled="true" />
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</LinearLayout>

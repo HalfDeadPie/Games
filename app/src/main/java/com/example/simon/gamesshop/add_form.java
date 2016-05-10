@@ -1,5 +1,17 @@
 package com.example.simon.gamesshop;
 
+/**
+ * Created by simon on 10.5.2016.
+ */
+
+import android.app.AlertDialog;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.RadioGroup;
+import android.widget.TextView;
+
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,22 +22,14 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 
-public class edit_form extends AppCompatActivity {
+public class add_form extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        System.out.println("Add form - onCreate");
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_form);
-
+        setContentView(R.layout.activity_add_form);
         Intent myIntent = getIntent();
-        String gameId = myIntent.getStringExtra("ID");
-        GetEdit(gameId);
-    }
-
-    private void GetEdit(String id) {
-        Connector con = new Connector(this);
-        //System.out.println(ID);
-        con.execute("GETEDIT", id);
     }
 
     @Override
@@ -40,7 +44,7 @@ public class edit_form extends AppCompatActivity {
     public void sendEdit(View view){
 
 
-
+        /*
         RadioGroup groupGenre = (RadioGroup) findViewById(R.id.groupGenre);
         RadioGroup groupPlatform = (RadioGroup) findViewById(R.id.groupPlatform);
 
@@ -94,14 +98,14 @@ public class edit_form extends AppCompatActivity {
             TextView idView = (TextView) findViewById(R.id.edit_form_uid);
 
             String id = idView.getText().toString();
-            con.execute("SENDEDIT", id);
+            //con.execute("SENDEDIT", id);
         }
-
+*/
     }
 
 
     private boolean isEmpty(Game g) {
-        if(     g.getGenre() == -1 ||
+       /* if(     g.getGenre() == -1 ||
                 g.getPlatform() == -1 ||
                 g.getCount() <0 ||
                 g.getDescription().equals("") ||
@@ -116,6 +120,8 @@ public class edit_form extends AppCompatActivity {
             return  true;
         }else{
             return false;
-        }
+        }*/
+        return false;
     }
 }
+

@@ -27,7 +27,8 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".detail" />
         <activity android:name=".edit_form" />
-        <activity android:name=".image_detail"></activity>
+        <activity android:name=".image_detail"/>
+        <activity android:name=".add_form"/>
     </application>
 
 </manifest>

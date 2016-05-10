@@ -248,18 +248,18 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         String ID = textView.getText().toString();                  // z dietata nacitame UID
         System.out.println("ID:     " + ID);
 
-
-        //ProgressDialog Loading = ProgressDialog.show(MainActivity.this, "", "Loading. Please wait...", true);
-        //System.out.println("Som tu1");
         Intent intent = new Intent(this, edit_form.class);
-        //System.out.println("Som tu2");
         intent.putExtra("ID", ID);//Put your id to your next Intent
-        //System.out.println(intent);
         startActivity(intent);
-        //System.out.println("Som tu4");
         finish();
+    }
 
-
+    public void toAdd(View view) {
+        System.out.println("Main: toAdd");
+        Intent intent = new Intent(this, add_form.class);
+        System.out.println("toAdd: starting activity . . .");
+        startActivity(intent);
+        finish();
     }
 
     public void BuyFromList(View view) {
