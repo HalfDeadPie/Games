@@ -24,11 +24,12 @@ import io.socket.emitter.Emitter;
 /**
  * Created by Jaroslav Lišiak on 09.05.2016.
  */
-public class IOConnector extends AsyncTask<String, String, String> {
+public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
     int aktivita = 0;
-    private String SERVERNAME = "/data/SSJL";
+    private String SERVERNAME = "/data/SS-JL-MTAA";
     private Socket mSocket = null;
     private AppCompatActivity activity;
+    String ID;
     public IOConnector(AppCompatActivity activity) {
         this.activity = activity;
     }
@@ -40,34 +41,88 @@ public class IOConnector extends AsyncTask<String, String, String> {
 
 
     @Override
-    protected String doInBackground(String... params) {
+    protected ArrayList<Game> doInBackground(String... params) {
         System.out.println("Background parameter 1:" + params[0]);
 
         if(params[0].equals("GETALL")){
             System.out.println("GETALL");
             aktivita = 1;   // v onPost spustame if ktory nastavi mainobrazovku
-            //return getAll();
-        }else if(params[0].equals("POST")){
-            System.out.println("POST");
-            aktivita = 6;   // v onPost spustame if ktory nastavi mainobrazovku
-            return post();
+            return getAll();
+        }else if(params[0].equals("ADD")){
+            System.out.println("GETALL");
+            aktivita = 1;
+            addNew();
+        }else if(params[0].equals("GETDETAIL")){
+            aktivita = 2;   // v onPost spustame if ktoy nastavi detail obrazovku
+            return getDetail(params[1]);
+        }else if(params[0].equals("GETEDIT")){
+            aktivita = 3;
+            ID = params[1];
+            return getDetail(params[1]);
+        }else if(params[0].equals("SENDEDIT")){
+            ID = params[1];
+            System.out.println("Connector vypis:"+ID);
+            aktivita = 4;
+            return sendEdit();
         }
+        else if(params[0].equals("BUY")){
+            aktivita = 5;
+            System.out.println("(EXECUTE)UID:"+params[1]+" COUNT:"+params[2]);
+            Buy(params[1],Integer.parseInt(params[2]));
+        }
+        else if(params[0].equals("SELL")){
+            aktivita = 6;
+            System.out.println("(EXECUTE)UID:"+params[1]+" COUNT:"+params[2]);
+            Sell(params[1], Integer.parseInt(params[2]));
+        }
+        else if(params[0].equals("DEL")){
+            aktivita = 7;
+            Delete(params[1]);
+        }
+        return null;
+    }
 
+    private void addNew() {
+        // z activity(reprezentuje okno z ktoreho bola funkcia zavolana) sa vytiahnu vsetky texty potrebne pre vytvorenie zaznamu
+    }
+
+    private void Buy(String UID, int i) {
+
+    }
+
+    private void Sell(String UID, int i) {
+
+    }
+
+    private ArrayList<Game> sendEdit() {
+        return null;
+    }
+
+    private void Delete(String UID) {
+
+    }
+
+
+
+    private ArrayList<Game> getDetail(String UID) {
+        // vracia instanciu triedy "Game" v ktorej su ulozene vsetky data stiahnute so servera
+        // UID je ID stahovaneho zaznamu
         return null;
     }
 
 
-    private  void getAll() {
+    private  ArrayList<Game> getAll() {
         if(mSocket == null){
-            IOConnector();
+            connect();
             System.out.println("Pripajam sa na socket server!");
         }
+        return null;
     }
 
     private String post(){
         if(mSocket == null){
             System.out.println("Pripajam sa na socket server!");
-            IOConnector();
+            connect();
             System.out.println("Som pripojeny na socket server!");
         }
         JSONObject data = null;
@@ -113,7 +168,7 @@ public class IOConnector extends AsyncTask<String, String, String> {
         return "koniec";
     }
 
-    private void IOConnector(){
+    private void connect(){
         IO.Options opts = new IO.Options();
         opts.secure = false;
         opts.port = 1341;
@@ -142,9 +197,6 @@ public class IOConnector extends AsyncTask<String, String, String> {
                 System.out.println("DISCONNECT");
             }
         });
-
-    }
-    private void connect(){
 
     }
 

@@ -23,7 +23,7 @@
                 android:id="@+id/cover_image"
                 android:layout_weight="0.15"
                 android:background="#000000"
-                android:onClick="IOsend"
+                android:onClick="toDetail"
                 android:layout_gravity="top"
                 android:foregroundGravity="top"
                 android:scaleType="fitStart"/>

@@ -94,7 +94,7 @@ public class add_form extends AppCompatActivity {
             dlgAlert.create().show();
         }else {
 
-            Connector con = new Connector(this);
+            IOConnector con = new IOConnector(this);
             TextView idView = (TextView) findViewById(R.id.edit_form_uid);
 
             String id = idView.getText().toString();
