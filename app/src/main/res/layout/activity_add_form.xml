@@ -284,7 +284,7 @@
                 android:layout_height="wrap_content"
                 android:text="Odoslať"
                 android:id="@+id/add_form_sendbutton"
-                android:onClick="sendEdit" />
+                android:onClick="sendAdd" />
 
             <TextView
                 android:layout_width="wrap_content"
