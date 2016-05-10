@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.ListView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -64,10 +65,6 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
             System.out.println("GETALL");
             aktivita = 1;   // v onPost spustame if ktory nastavi mainobrazovku
             return getAll();
-        }else if(params[0].equals("ADD")){
-            System.out.println("mainskelet: ADD");
-            aktivita = 1;
-            addNew();
         }else if(params[0].equals("GETDETAIL")){
             aktivita = 2;   // v onPost spustame if ktoy nastavi detail obrazovku
             return getDetail(params[1]);
@@ -94,8 +91,42 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
         else if(params[0].equals("DEL")){
             aktivita = 7;
             Delete(params[1]);
+        }else if(params[0].equals("ADD")){
+            System.out.println("ADD");
+            aktivita = 8;
+            addNew();
         }
         return null;
+    }
+
+
+    @Override
+    protected void onPostExecute(ArrayList<Game> GameList) {
+        super.onPostExecute(GameList);
+        if(aktivita == 1){   // getAll();
+            setMain(GameList);
+            //Loading.dismiss();
+        }else if(aktivita == 2){    // getDetail()
+            // setDetail(GameList.get(0)); // nastavi detail okno
+            // Loading.dismiss();          // zastavi loading
+        }else if(aktivita == 3){
+            //setEdit(GameList.get(0));
+            //Loading.dismiss();
+        }
+
+        else if(aktivita == 4) {
+            // Loading.dismiss();
+        }
+        else if(aktivita == 5){//Buy() - inkrementovanie hodnoty počtu kusov
+            //  Loading.dismiss();
+        }
+        else if(aktivita == 6){//Sell() - dekrementovanie hodnoty počtu kusov
+            // Loading.dismiss();
+        }
+        else if(aktivita == 7){
+            // Loading.dismiss();
+        }
+
     }
 
     private void addNew() {
@@ -231,81 +262,27 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
     }
 
     private ArrayList<Game> sendEdit() {
-        ArrayList<Game> GameList = new ArrayList<Game>();
-        JSONObject getQuery = new JSONObject();
-        final JSONObject[] data = new JSONObject[1];
-
-        if(mSocket == null){
-            connect();
-            System.out.println("Pripajam sa na socket server!");
-        }
-
-        try {
-            getQuery.put("url", SERVERNAME );
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        Ack ack = new Ack(){
-            @Override
-            public void call(Object... os) {
-                if (os[0] != null) {
-                    //System.out.println(os[0]);
-                    JSONObject jsonAll = null;
-                    try {
-                        jsonAll = new JSONObject(os[0].toString());
-                        int statusCode = jsonAll.getInt("statusCode");
-                        if (statusCode != 200) {
-                            error = statusCode;
-                        }
-                        else {
-                            data[0] = jsonAll.getJSONObject("body");
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-                //openEvent();
-            }
-        };
-
-        //send(mSocket,"get",getQuery,ack);
-        if (error == 0) {
-            AllListBuilder(data[0].toString(), GameList);
-            return GameList;
-        }
-        return null;
+        return  null;
     }
 
 
-/*
+
     public static void send(Socket sock,String event,JSONObject jObj,Ack ack){
 
-        synchronized(connectObj) {
-            while(ApiRequest2.isTest() == false) {
-                System.out.println("Testujem test");
-                if (!sock.connected()){
-                    sock.connect();
-                }
-                connectObj.wait();
-                System.out.println("Testujem test2");
-            }
-        }
-        if (error == null) {
-            sock.emit(event, jObj,ack);
+            sock.emit(event, jObj, ack);
+
 
             synchronized(eventObj) {
-                while(ApiRequest2.isEventTest() == false) {
-                    System.out.println("Testujem test3");
-                    eventObj.wait();
-                    System.out.println("Testujem test4");
+                try {
+                    eventObj.wait(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-                ApiRequest2.setEventTest(false);
             }
-        }
+
 
     }
-*/
+
     private void Delete(String UID) {
 
     }
@@ -320,64 +297,66 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
 
 
     private  ArrayList<Game> getAll() {
+        System.out.println("Spustam getAll");
         if(mSocket == null){
             connect();
-            System.out.println("Pripajam sa na socket server!");
+            System.out.println("Pripojil som sa na socket server!");
+        }
+
+        ArrayList<Game> GameList = new ArrayList<Game>();
+        JSONObject getQuery = new JSONObject();
+        final JSONObject[] data = new JSONObject[1];
+
+        try {
+            System.out.println("Vytvaram Json s URL: " + SERVERNAME);
+            getQuery.put("url", SERVERNAME);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Ack ack = new Ack(){
+            @Override
+            public void call(Object... os) {
+                System.out.println("Prijal som ACK");
+                if (os[0] != null) {
+                    //System.out.println(os[0]);
+                    JSONObject jsonAll = null;
+                    try {
+                        jsonAll = new JSONObject(os[0].toString());
+                        int statusCode = jsonAll.getInt("statusCode");
+                        if (statusCode != 200) {
+                            System.out.println("Chyba, neprijal som 200 OK, ale chybu: " + statusCode);
+                            error = statusCode;
+                        }
+                        else {
+                            System.out.println("Prijal som data v poriadku");
+                            data[0] = jsonAll.getJSONObject("body");
+                            System.out.println("Ulozil  som data do premennej data[0] vypis: \n" + data[0]);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                //openEvent();
+            }
+        };
+
+        System.out.println("Posielam GET s JSONOM: " + getQuery);
+        send(mSocket, "get", getQuery, ack);
+        System.out.println("Poslal som GET!");
+        if (error == 0) {
+            System.out.println("Prijate data su: " +  data[0]);
+            System.out.println("Posielam prijate data do parseru");
+            AllListBuilder(data[0].toString(), GameList);
+            System.out.println("Rozparsoval som data");
+            return GameList;
         }
         return null;
     }
 
-    /*
-    private String post(){
-        if(mSocket == null){
-            System.out.println("Pripajam sa na socket server!");
-            connect();
-            System.out.println("Som pripojeny na socket server!");
-        }
-        JSONObject data = null;
-        JSONObject jsObj = null;
-        Ack odpoved = new Ack(){
-            @Override
-            public void call(Object... os) { //funkcia volana po prijati potvrdenia
-                if (os[0] != null) {
-                    System.out.println(os[0]);
-                    JSONObject json = null;
-                    try {
-                        json = new JSONObject(os[0].toString());
-                        System.out.println(json.getJSONObject("body"));
-                    } catch (JSONException ex) {
-                       System.out.println(ex);
-                    }
-                }
-            }
-        };
-        data = new JSONObject();
-        try {
-            data.put("Nazov","Skusobna hra");
-            data.put("price",200);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
 
-        try {
-            jsObj = new JSONObject().put("data", data);
-        } catch (JSONException ex) {
-            System.out.println(ex);
-        }
-        JSONObject jsPost = new JSONObject();
-
-
-        try {
-            jsPost.put("url", SERVERNAME);
-            jsPost.put("data", jsObj);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        mSocket.emit("post",jsPost,odpoved);
-        return "koniec";
-    }
-    */
     private void connect(){
+        System.out.println("Spustam pripajanie na server");
         IO.Options opts = new IO.Options();
         opts.secure = false;
         opts.port = 1341;
@@ -394,7 +373,8 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
             @Override
             public void call(Object... args) {
                 //System.out.println(args[0]);
-                System.out.println("CONNECT");
+                System.out.println("--->>> CONNECT <<<---");
+                System.out.println("Pripojenie bolo uspesne!");
                 //socket.emit("foo", "hi");
                 //socket.disconnect();
             }
@@ -403,10 +383,11 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
             @Override
             public void call(Object... args) {
                 System.out.println(args[0]);
-                System.out.println("DISCONNECT");
+                System.out.println("--->>> DISCONNECT <<<---");
+                System.out.println("ODPOJENIE OD SERVERA!!!");
             }
         });
-
+        System.out.println("Koniec pripajania na server");
     }
 
     private void disconnect(){
@@ -449,9 +430,16 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
             try {
                 JSONObject ParentObject = new JSONObject(JsonString);//mega json so všetkým, čo prišlo
                 JSONArray ParentArray = ParentObject.getJSONArray("data");//pole jsonov - vybrané len data bez headeru
+                System.out.println("Ciastocny parser vyparsoval array");
                 if (ParentArray != null)//všetky hry v JSONe pridá do zoznamu
                     for (int i=0;i<ParentArray.length();i++){
-                        GameList.add(ListParser(ParentArray.getJSONObject(i), new Game()));
+                        System.out.println("parentArray[i]"+ParentArray.getJSONObject(i));
+
+                        String id = ParentArray.getJSONObject(i).getString("id"); // id parsovaneho JSONU
+                        JSONObject data = ParentArray.getJSONObject(i).getJSONObject("data");
+                        System.out.println("ID: " + id);
+                        System.out.println("Data ktore idem este parsovat: " + data);
+                        GameList.add(ListParser(data, id, new Game()));
                     }
             }
             catch(Exception e)
@@ -460,6 +448,7 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
             }
             return GameList;
         }else if(aktivita == 2 || aktivita == 3){    // getDetail() - pride maly json alebo // getedit()
+            /*
             try {
 
                 JSONObject ParentObject = new JSONObject(JsonString);//mega json so všetkým, čo prišlo
@@ -474,15 +463,17 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
                 Log.d("JSON", "Toto je chyba s JSONOM:" + e.getMessage());//debug výpis
             }
             return GameList;
+            */
         }
 
         return GameList;
     }
 
-    public Game ListParser(JSONObject JG, Game SG){
+    public Game ListParser(JSONObject JG,String id, Game SG){
+        System.out.println("Som v parsery");
+        System.out.println("Idem parsovat nasledujuce data:" + JG.toString());
         try {
-
-
+            System.out.println("Som tu: NAME = " + JG.getString("name"));
             SG.setName(JG.getString("name"));
             SG.setReleaseDate(JG.getString("release_date"));
             SG.setDescription(JG.getString("description"));
@@ -495,18 +486,41 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
             SG.setPrice(JG.getInt("price"));
             SG.setProducer(JG.getString("producer"));
             SG.setRating(JG.getInt("rating"));
-            SG.setVideo(JG.getString("video"));
-            SG.setUID(JG.getString("objectId"));
+            //SG.setVideo(JG.getString("video"));
+            SG.setUID(id);
             SG.setCoverImage(image(SG.getImage()));
+            System.out.println("Idem vypisat SG");
+            SG.vypis();
         } catch (JSONException e) {
             Log.d("JSON","Chyba pri parsovaní!");
         }
         return SG;
     }
 
+
+    protected void setMain(ArrayList<Game> GameList){
+        ListView viewGL = (ListView) activity.findViewById(R.id.viewGL);
+
+        String[] Names = new String[GameList.size()];
+        int[] Counts = new int[GameList.size()];
+        Bitmap[] Images = new Bitmap[GameList.size()];
+        String[] UIDs = new String[GameList.size()];
+
+        for(int i=0; i<GameList.size() ;i++){
+            Names[i] = GameList.get(i).getName();
+            Counts[i] = GameList.get(i).getCount();
+            Images[i]= GameList.get(i).getCoverImage();
+            String ID = GameList.get(i).getUID();
+            UIDs[i] = ID;
+        }
+        viewGL.setAdapter(new CustomAdapter(activity, Names, Counts, Images, UIDs));
+    }
     private Bitmap image(String link) {
+        System.out.println("Stary link: " + link);
+        String newLink = link.replace("'\'","");
+        System.out.println("Novy link: "+ newLink);
         try {
-            Bitmap bitmap = BitmapFactory.decodeStream((InputStream) new URL(link).getContent());
+            Bitmap bitmap = BitmapFactory.decodeStream((InputStream) new URL(newLink).getContent());
             return bitmap;
         } catch (MalformedURLException e) {
             e.printStackTrace();

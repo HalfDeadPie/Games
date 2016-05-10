@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        GetAll();
+        //GetAll();
 
         ListView listView = (ListView) findViewById(R.id.viewGL);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -94,10 +94,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         return true;    // opravit pred odovzdanim
     }
 
-    public void IOsend(View view){
-        IOConnector con = new IOConnector(this);
-        con.execute("POST");
-    }
 
     public void onRefresh() {
         GetAll();
@@ -109,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             swipeRefreshLayout.setRefreshing(true);
             String Json = "";
             ArrayList<Game> GameList = new ArrayList<Game>();
-            Connector con = new Connector(this);
+            IOConnector con = new IOConnector(this);
             con.execute("GETALL");
             swipeRefreshLayout.setRefreshing(false);
         } else {
