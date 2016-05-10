@@ -51,7 +51,7 @@ public class detail extends AppCompatActivity {
     }
 
     public void GetDetail(String ID) {
-        Connector con = new Connector(this);
+        IOConnector con = new IOConnector(this);
         //System.out.println(ID);
         con.execute("GETDETAIL", ID);
     }
