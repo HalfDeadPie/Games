@@ -1,19 +1,27 @@
 package com.example.simon.gamesshop;
 
 import android.app.ProgressDialog;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.provider.SyncStateContract;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import io.socket.client.Ack;
@@ -30,9 +38,10 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
     private Socket mSocket = null;
     private AppCompatActivity activity;
     String ID;
-    public IOConnector(AppCompatActivity activity) {
-        this.activity = activity;
-    }
+    public IOConnector(AppCompatActivity activity) {this.activity = activity;}
+    private static final Object connectObj = new Object();
+    private static final Object eventObj = new Object();
+    private int error;
 
     @Override
     protected void onPreExecute() {
@@ -95,9 +104,81 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
     }
 
     private ArrayList<Game> sendEdit() {
+        ArrayList<Game> GameList = new ArrayList<Game>();
+        JSONObject getQuery = new JSONObject();
+        final JSONObject[] data = new JSONObject[1];
+
+        if(mSocket == null){
+            connect();
+            System.out.println("Pripajam sa na socket server!");
+        }
+
+        try {
+            getQuery.put("url", SERVERNAME );
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Ack ack = new Ack(){
+            @Override
+            public void call(Object... os) {
+                if (os[0] != null) {
+                    //System.out.println(os[0]);
+                    JSONObject jsonAll = null;
+                    try {
+                        jsonAll = new JSONObject(os[0].toString());
+                        int statusCode = jsonAll.getInt("statusCode");
+                        if (statusCode != 200) {
+                            error = statusCode;
+                        }
+                        else {
+                            data[0] = jsonAll.getJSONObject("body");
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                //openEvent();
+            }
+        };
+
+        //send(mSocket,"get",getQuery,ack);
+        if (error == 0) {
+            AllListBuilder(data[0].toString(), GameList);
+            return GameList;
+        }
         return null;
     }
 
+
+/*
+    public static void send(Socket sock,String event,JSONObject jObj,Ack ack){
+
+        synchronized(connectObj) {
+            while(ApiRequest2.isTest() == false) {
+                System.out.println("Testujem test");
+                if (!sock.connected()){
+                    sock.connect();
+                }
+                connectObj.wait();
+                System.out.println("Testujem test2");
+            }
+        }
+        if (error == null) {
+            sock.emit(event, jObj,ack);
+
+            synchronized(eventObj) {
+                while(ApiRequest2.isEventTest() == false) {
+                    System.out.println("Testujem test3");
+                    eventObj.wait();
+                    System.out.println("Testujem test4");
+                }
+                ApiRequest2.setEventTest(false);
+            }
+        }
+
+    }
+*/
     private void Delete(String UID) {
 
     }
@@ -203,5 +284,108 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
     private void disconnect(){
         mSocket.disconnect();
         mSocket.off();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public ArrayList<Game> AllListBuilder(String JsonString,  ArrayList<Game> GameList){
+        if(aktivita ==1){   // getAll() - pride velky json
+            try {
+                JSONObject ParentObject = new JSONObject(JsonString);//mega json so všetkým, čo prišlo
+                JSONArray ParentArray = ParentObject.getJSONArray("data");//pole jsonov - vybrané len data bez headeru
+                if (ParentArray != null)//všetky hry v JSONe pridá do zoznamu
+                    for (int i=0;i<ParentArray.length();i++){
+                        GameList.add(ListParser(ParentArray.getJSONObject(i), new Game()));
+                    }
+            }
+            catch(Exception e)
+            {
+                Log.d("JSON", "Toto je chyba s JSONOM:" + e.getMessage());//debug výpis
+            }
+            return GameList;
+        }else if(aktivita == 2 || aktivita == 3){    // getDetail() - pride maly json alebo // getedit()
+            try {
+
+                JSONObject ParentObject = new JSONObject(JsonString);//mega json so všetkým, čo prišlo
+                // JSONArray ParentArray = ParentObject.getJSONArray("data");//pole jsonov - vybrané len data bez headeru
+                if (ParentObject != null)//všetky hry v JSONe pridá do zoznamu
+                    for (int i=0;i<ParentObject.length();i++){
+                        GameList.add(ListParser(ParentObject, new Game()));
+                    }
+            }
+            catch(Exception e)
+            {
+                Log.d("JSON", "Toto je chyba s JSONOM:" + e.getMessage());//debug výpis
+            }
+            return GameList;
+        }
+
+        return GameList;
+    }
+
+    public Game ListParser(JSONObject JG, Game SG){
+        try {
+
+
+            SG.setName(JG.getString("name"));
+            SG.setReleaseDate(JG.getString("release_date"));
+            SG.setDescription(JG.getString("description"));
+            SG.setCount(JG.getInt("count"));
+            SG.setGenre(JG.getInt("genre"));
+            SG.setImage(JG.getString("image"));
+            SG.setLanguage(JG.getString("language"));
+            SG.setPegi(JG.getString("pegi"));
+            SG.setPlatform(JG.getInt("platform"));
+            SG.setPrice(JG.getInt("price"));
+            SG.setProducer(JG.getString("producer"));
+            SG.setRating(JG.getInt("rating"));
+            SG.setVideo(JG.getString("video"));
+            SG.setUID(JG.getString("objectId"));
+            SG.setCoverImage(image(SG.getImage()));
+        } catch (JSONException e) {
+            Log.d("JSON","Chyba pri parsovaní!");
+        }
+        return SG;
+    }
+
+    private Bitmap image(String link) {
+        try {
+            Bitmap bitmap = BitmapFactory.decodeStream((InputStream) new URL(link).getContent());
+            return bitmap;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("ERROR : Vraciam null - stahovanie obrazku sa nepodarilo");
+        return null;
     }
 }
