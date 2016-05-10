@@ -181,5 +181,21 @@ public class Game
         return releaseDate;
     }
 
+    public void vypis(){
+        System.out.println("count: "+count);
+        System.out.println("description: "+description);
+        System.out.println("genre: "+genre);
+        System.out.println("image: "+image);
+        System.out.println("language: "+language);
+        System.out.println("name: "+name);
+        System.out.println("pegi: "+pegi);
+        System.out.println("platform: "+platform);
+        System.out.println("price: "+price);
+        System.out.println("producer: "+producer);
+        System.out.println("rating: "+ rating);
+        System.out.println("release_date: "+ releaseDate);
+
+
+    }
 }
 
