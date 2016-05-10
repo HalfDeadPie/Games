@@ -6,11 +6,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.provider.SyncStateContract;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.ListView;
@@ -107,7 +109,7 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
             setMain(GameList);
             //Loading.dismiss();
         }else if(aktivita == 2){    // getDetail()
-            // setDetail(GameList.get(0)); // nastavi detail okno
+            setDetail(GameList.get(0)); // nastavi detail okno
             // Loading.dismiss();          // zastavi loading
         }else if(aktivita == 3){
             //setEdit(GameList.get(0));
@@ -274,7 +276,7 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
 
             synchronized(eventObj) {
                 try {
-                    eventObj.wait(2000);
+                    eventObj.wait(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -292,6 +294,67 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
     private ArrayList<Game> getDetail(String UID) {
         // vracia instanciu triedy "Game" v ktorej su ulozene vsetky data stiahnute so servera
         // UID je ID stahovaneho zaznamu
+        System.out.println("GET DETAIL cez socket IO s id: " + UID);
+
+        if(mSocket == null){
+            connect();
+            System.out.println("Pripojil som sa na socket server!");
+        }
+        ArrayList<Game> GameList = new ArrayList<Game>();
+        JSONObject getQuery = new JSONObject();
+        final JSONObject[] data = new JSONObject[1];
+
+        try {
+            System.out.println("Vytvaram Json s URL: " + SERVERNAME+"/"+UID);
+            getQuery.put("url", SERVERNAME+"/"+UID);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Ack ack = new Ack(){
+            @Override
+            public void call(Object... os) {
+                System.out.println("Prijal som ACK");
+                if (os[0] != null) {
+                    //System.out.println(os[0]);
+                    JSONObject jsonAll = null;
+                    try {
+                        jsonAll = new JSONObject(os[0].toString());
+                        int statusCode = jsonAll.getInt("statusCode");
+                        if (statusCode != 200) {
+                            System.out.println("Chyba, neprijal som 200 OK, ale chybu: " + statusCode);
+                            error = statusCode;
+                        }
+                        else {
+                            System.out.println("Prijal som data v poriadku");
+                            data[0] = jsonAll.getJSONObject("body");
+                            System.out.println("Ulozil  som data do premennej data[0] vypis: \n" + data[0]);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                //openEvent();
+            }
+        };
+
+        System.out.println("Posielam GET s JSONOM: " + getQuery);
+        send(mSocket, "get", getQuery, ack);
+        System.out.println("Poslal som GET!");
+        if (error == 0) {
+            System.out.println("Prijate data su: " +  data[0]);
+            System.out.println("Posielam prijate data do parseru");
+            AllListBuilder(data[0].toString(), GameList);
+            System.out.println("Rozparsoval som data");
+            return GameList;
+        }
+
+
+
+
+
+
+
         return null;
     }
 
@@ -448,14 +511,18 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
             }
             return GameList;
         }else if(aktivita == 2 || aktivita == 3){    // getDetail() - pride maly json alebo // getedit()
-            /*
+            System.out.println("Parsujem pre aktivitu 2");
             try {
 
                 JSONObject ParentObject = new JSONObject(JsonString);//mega json so všetkým, čo prišlo
+
                 // JSONArray ParentArray = ParentObject.getJSONArray("data");//pole jsonov - vybrané len data bez headeru
                 if (ParentObject != null)//všetky hry v JSONe pridá do zoznamu
                     for (int i=0;i<ParentObject.length();i++){
-                        GameList.add(ListParser(ParentObject, new Game()));
+                        JSONObject data = ParentObject.getJSONObject("data");
+                        String id = ParentObject.getString("id");
+                        System.out.println(ParentObject.toString());
+                        GameList.add(ListParser(data, id, new Game()));
                     }
             }
             catch(Exception e)
@@ -463,7 +530,7 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
                 Log.d("JSON", "Toto je chyba s JSONOM:" + e.getMessage());//debug výpis
             }
             return GameList;
-            */
+
         }
 
         return GameList;
@@ -490,7 +557,7 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
             SG.setUID(id);
             SG.setCoverImage(image(SG.getImage()));
             System.out.println("Idem vypisat SG");
-            SG.vypis();
+            //SG.vypis();
         } catch (JSONException e) {
             Log.d("JSON","Chyba pri parsovaní!");
         }
@@ -516,9 +583,9 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
         viewGL.setAdapter(new CustomAdapter(activity, Names, Counts, Images, UIDs));
     }
     private Bitmap image(String link) {
-        System.out.println("Stary link: " + link);
+        //System.out.println("Stary link: " + link);
         String newLink = link.replace("'\'","");
-        System.out.println("Novy link: "+ newLink);
+        //System.out.println("Novy link: "+ newLink);
         try {
             Bitmap bitmap = BitmapFactory.decodeStream((InputStream) new URL(newLink).getContent());
             return bitmap;
@@ -530,4 +597,58 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
         System.out.println("ERROR : Vraciam null - stahovanie obrazku sa nepodarilo");
         return null;
     }
+    protected void setDetail(Game g){
+        // z premennej activity (aktualne detail okno) vyberame vsetky komponenty a
+        // nastavime do nich data
+        TextView detail_description = (TextView) activity.findViewById(R.id.detail_description);
+        TextView detail_name = (TextView) activity.findViewById(R.id.detail_name);
+        ImageView detail_image = (ImageView) activity.findViewById(R.id.detail_image);
+        TextView detail_pegi = (TextView) activity.findViewById(R.id.detail_pegi);
+        TextView detail_rating = (TextView) activity.findViewById(R.id.detail_rating);
+        TextView detail_price = (TextView) activity.findViewById(R.id.detail_price);
+        TextView detail_date = (TextView) activity.findViewById(R.id.detail_date);
+        TextView detail_count = (TextView) activity.findViewById(R.id.detail_count);
+        TextView detail_producer = (TextView) activity.findViewById(R.id.detail_producer);
+        TextView detail_genre = (TextView) activity.findViewById(R.id.detail_genre);
+        TextView detail_language = (TextView) activity.findViewById(R.id.detail_language);
+        TextView detail_platform = (TextView) activity.findViewById(R.id.detail_platform);
+        TextView detail_id = (TextView) activity.findViewById(R.id.detail_id);
+
+
+        detail_name.setText(g.getName());
+        detail_image.setImageBitmap(g.getCoverImage());
+        detail_pegi.setText(g.getPegi());
+        detail_rating.setText(Integer.toString(g.getRating())+"%");
+        detail_price.setText(Integer.toString(g.getPrice())+"€");
+        detail_description.setText(g.getDescription());
+        detail_count.setText(Integer.toString(g.getCount()));
+        if(g.getCount()==0){
+            detail_count.setTextColor(Color.RED);
+        }
+        detail_date.setText(g.getReleaseDate());
+        detail_producer.setText(g.getProducer());
+        switch(g.getGenre()){
+            case 0: detail_genre.setText("Action");break;
+            case 1: detail_genre.setText("Adventure");break;
+            case 2: detail_genre.setText("Casual");break;
+            case 3: detail_genre.setText("Indie");break;
+            case 4: detail_genre.setText("Massive Multiplayer");break;
+            case 5: detail_genre.setText("Racing");break;
+            case 6: detail_genre.setText("RPG");break;
+            case 7: detail_genre.setText("Simulation");break;
+            case 8: detail_genre.setText("Sports");break;
+            case 9: detail_genre.setText("Strategy");break;
+        }
+        detail_language.setText(g.getLanguage());
+        switch(g.getPlatform()){
+            case 0: detail_platform.setText("PC");break;
+            case 1: detail_platform.setText("PS3");break;
+            case 2: detail_platform.setText("PS4");break;
+            case 3: detail_platform.setText("XBOX ONE");break;
+            case 4: detail_platform.setText("XBOX 360");break;
+            case 5: detail_platform.setText("Nintendo Wii");break;
+        }
+        detail_id.setText(g.getUID());
+    }
+
 }
