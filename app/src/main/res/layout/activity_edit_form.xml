@@ -26,14 +26,16 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/edit_form_price"
                 android:layout_gravity="center_horizontal"
-                android:hint="Price"/>
+                android:hint="Price"
+                android:inputType="numberDecimal" />
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/edit_form_rating"
                 android:layout_gravity="center_horizontal"
-                android:hint="Rating"/>
+                android:hint="Rating"
+                android:inputType="numberDecimal" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -81,13 +83,15 @@
                     android:layout_width="159dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/edit_form_pegi"
-                    android:hint="Pegi" />
+                    android:hint="Pegi"
+                    android:inputType="numberDecimal" />
 
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/edit_form_count"
-                    android:hint="Count"/>
+                    android:hint="Count"
+                    android:inputType="numberDecimal" />
             </LinearLayout>
 
             <TextView
