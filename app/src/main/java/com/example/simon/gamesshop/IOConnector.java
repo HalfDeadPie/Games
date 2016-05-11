@@ -201,6 +201,11 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
                             System.out.println(ex);
                         }
                     }
+                    synchronized(eventObj) {
+
+                        eventObj.notifyAll();
+
+                    }
                 }
             };
             data = new JSONObject();
@@ -338,11 +343,15 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
 
     public static void send(Socket sock,String event,JSONObject jObj,Ack ack){
 
-            sock.emit(event, jObj, ack);
+        sock.emit(event, jObj, ack);
         synchronized(eventObj) {
 
 
+            try {
                 eventObj.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
         }
 
@@ -369,7 +378,6 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
             public void call(Object... os) {
                 System.out.println("Prijal som ACK");
                 if (os[0] != null) {
-                    //System.out.println(os[0]);
                     JSONObject jsonAll = null;
                     try {
                         jsonAll = new JSONObject(os[0].toString());
@@ -382,7 +390,13 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
                         e.printStackTrace();
                     }
                 }
+                synchronized(eventObj) {
+
+                    eventObj.notifyAll();
+
+                }
             }
+
         };
 
         System.out.println("Posielam DELETE s JSONOM: " + getQuery);
@@ -544,7 +558,11 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
                         e.printStackTrace();
                     }
                 }
-                //openEvent();
+                synchronized(eventObj) {
+
+                    eventObj.notifyAll();
+
+                }
             }
         };
 
@@ -603,7 +621,11 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
                         e.printStackTrace();
                     }
                 }
-                //openEvent();
+                synchronized(eventObj) {
+
+                    eventObj.notifyAll();
+
+                }
             }
         };
 
@@ -690,6 +712,11 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
                         } catch (JSONException ex) {
                             System.out.println(ex);
                         }
+                    }
+                    synchronized(eventObj) {
+
+                        eventObj.notifyAll();
+
                     }
                 }
             };
