@@ -61,23 +61,28 @@ public class edit_form extends AppCompatActivity {
         TextView detail_uid = (TextView) findViewById(R.id.edit_form_uid);
 
         Game g = new Game();
-        g.setName(detail_name.getText().toString());
-        g.setDescription(detail_description.getText().toString());
-        g.setPegi(detail_pegi.getText().toString());
-        g.setRating(Integer.parseInt(detail_rating.getText().toString()));
-        g.setImage(detail_image.getText().toString());
-        g.setPrice(Integer.parseInt(detail_price.getText().toString()));
-        g.setReleaseDate(detail_date.getText().toString());
-        g.setCount(Integer.parseInt(detail_count.getText().toString()));
-        g.setProducer(detail_producer.getText().toString());
-        g.setLanguage(detail_language.getText().toString());
-        g.setGenre(GenreID);
-        g.setPlatform(PlatformID);
-        g.setUID(detail_uid.getText().toString());
+        try {
+            g.setName(detail_name.getText().toString());
+            g.setDescription(detail_description.getText().toString());
+            g.setPegi(detail_pegi.getText().toString());
+            g.setRating(Integer.parseInt(detail_rating.getText().toString()));
+            g.setImage(detail_image.getText().toString());
+            g.setPrice(Integer.parseInt(detail_price.getText().toString()));
+            g.setReleaseDate(detail_date.getText().toString());
+            g.setCount(Integer.parseInt(detail_count.getText().toString()));
+            g.setProducer(detail_producer.getText().toString());
+            g.setLanguage(detail_language.getText().toString());
+            g.setGenre(GenreID);
+            g.setPlatform(PlatformID);
+            g.setUID(detail_uid.getText().toString());
+        } catch (Exception e) {
+            System.out.println("Error: Fields are filled wrong!");
+        }
 
         if(isEmpty(g)){
+            //ak neboli zadane vsetky udaje, zobrazi sa upozornenie
             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(this);
-            dlgAlert.setMessage("Please fill all required fields!");
+            dlgAlert.setMessage("Fields are filled wrong!");
             dlgAlert.setTitle("Error!");
             dlgAlert.setCancelable(true);
             dlgAlert.create().show();
@@ -87,17 +92,16 @@ public class edit_form extends AppCompatActivity {
             TextView idView = (TextView) findViewById(R.id.edit_form_uid);
 
             String id = idView.getText().toString();
-            System.out.println("SENDING EDIT:"+id);
             con.execute("SENDEDIT", id);
         }
-
     }
 
     //kontrola a ciastocna validacia dat
+    //funkcia na kontrolu absencie udajov
     private boolean isEmpty(Game g) {
-        if(     g.getGenre() == -1 ||
+        if (g.getGenre() == -1 ||
                 g.getPlatform() == -1 ||
-                g.getCount() <0 ||
+                g.getCount() < 0 ||
                 g.getDescription().equals("") ||
                 g.getImage().equals("") ||
                 g.getLanguage().equals("") ||
@@ -106,9 +110,11 @@ public class edit_form extends AppCompatActivity {
                 g.getPrice() < 0 ||
                 g.getReleaseDate().equals("") ||
                 g.getRating() < 0 ||
-                g.getProducer().equals("")){
-            return  true;
-        }else{
+                g.getRating() > 100 ||
+                g.getProducer().equals("")) {
+            return true;
+        }
+        else{
             return false;
         }
     }

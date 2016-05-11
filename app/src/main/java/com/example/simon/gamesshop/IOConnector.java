@@ -40,9 +40,6 @@ import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
-/**
- * Created by Jaroslav Lišiak on 09.05.2016.
- */
 public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
     int aktivita = 0;
     private String SERVERNAME = "/data/SS-JL-MTAA";
@@ -66,10 +63,7 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
 
     @Override
     protected ArrayList<Game> doInBackground(String... params) {
-        System.out.println("Background parameter 1:" + params[0]);
-
         if(params[0].equals("GETALL")){
-            System.out.println("GETALL");
             aktivita = 1;   // v onPost spustame if ktory nastavi mainobrazovku
             return getAll();
         }else if(params[0].equals("GETDETAIL")){
@@ -81,21 +75,17 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
             return getDetail(params[1]);
         }else if(params[0].equals("SENDEDIT")){
             ID = params[1];
-            System.out.println("Connector SENDEDIT vypis:"+ID);
             aktivita = 4;
             return sendEdit(ID);
-        }
-        else if(params[0].equals("BUY")){
+        } else if(params[0].equals("BUY")){
             aktivita = 5;
             System.out.println("(EXECUTE)UID:"+params[1]+" COUNT:"+params[2]);
             Buy(params[1],Integer.parseInt(params[2]));
-        }
-        else if(params[0].equals("SELL")){
+        } else if(params[0].equals("SELL")){
             aktivita = 6;
             System.out.println("(EXECUTE)UID:"+params[1]+" COUNT:"+params[2]);
             Sell(params[1], Integer.parseInt(params[2]));
-        }
-        else if(params[0].equals("DEL")){
+        }else if(params[0].equals("DEL")){
             aktivita = 7;
             Delete(params[1]);
         }else if(params[0].equals("ADD")){
@@ -106,23 +96,14 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
         return null;
     }
 
-
-    @Override
     protected void onPostExecute(ArrayList<Game> GameList) {
         super.onPostExecute(GameList);
         if(aktivita == 1){   // getAll();
             setMain(GameList);
-            //Loading.dismiss();
         }else if(aktivita == 2){    // getDetail()
             setDetail(GameList.get(0)); // nastavi detail okno
-            // Loading.dismiss();          // zastavi loading
-        }else if(aktivita == 3){
+        }else if(aktivita == 3) {
             setEdit(GameList.get(0));
-            //Loading.dismiss();
-        }
-
-        else if(aktivita == 4) {
-            // Loading.dismiss();
         }
         Loading.dismiss();
     }
@@ -173,9 +154,7 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
         try {
             //odosielanie
             if(mSocket == null){
-                System.out.println("Pripajam sa na socket server!");
                 connect();
-                System.out.println("Som pripojeny na socket server!");
             }
             JSONObject data = null;
             JSONObject jsObj = null;
@@ -187,35 +166,27 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
                         JSONObject json = null;
                         try {
                             json = new JSONObject(os[0].toString());
-                            System.out.println(json.getJSONObject("body"));
-
                             if(json.getInt("statusCode")==200){
-                                System.out.println("ANSWER OK : "+json.getInt("statusCode"));
                                 activity.startActivity(new Intent(activity,MainActivity.class));
                                 activity.finish();
                             }
                             else{
-                                System.out.println("ANSWER WRONG: "+json.getInt("statusCode"));
+                                System.out.println("Error: "+json.getInt("statusCode"));
                             }
                         } catch (JSONException ex) {
                             System.out.println(ex);
                         }
                     }
                     synchronized(eventObj) {
-
                         eventObj.notifyAll();
-
                     }
                 }
             };
             data = new JSONObject();
             try {
-                System.out.println("building json");
                 //tu zostavím json
                 String json = "";
                 JSONObject jsonObject;
-
-
 
                 data.put("image",g.getImage());
                 data.put("pegi", g.getPegi());
@@ -231,9 +202,8 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
                 data.put("producer",g.getProducer());
 
                 String printJSON = data.toString();
-                System.out.println(printJSON);
             } catch (JSONException e) {
-                e.printStackTrace();
+                System.out.println(e);
             }
             //pridám do jsonu hlavicku
             try {
@@ -241,15 +211,13 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
             } catch (JSONException ex) {
                 System.out.println(ex);
             }
-            System.out.println("Pridana hlavicka do JSONU");
             JSONObject jsPost = new JSONObject();
             try {
                 jsPost.put("url", SERVERNAME);
                 jsPost.put("data", jsObj);
             } catch (JSONException e) {
-                e.printStackTrace();
+                System.out.println(e);
             }
-            System.out.println("Odosielanie . . .");
             mSocket.emit("post",jsPost,odpoved);
         } catch (Exception e) {
             e.printStackTrace();
@@ -257,22 +225,17 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
     }
 
     private void Buy(String UID, int i) {
-        System.out.println("Som v Buy()");
         i++;
         ArrayList<Game> games = new ArrayList<Game>();
         games = getDetail(UID);
         Game g = new Game();
-        System.out.println("V Buy() - ziskal som detail podla UID: " + UID);
-        System.out.println("Velkost Listu je: " + games.size());
         if(games.size() > 0) {
             g = games.get(0);
-            System.out.println("v Buy() idem poslat novy json");
             g.setCount(i);
             sendUpdate(g,UID);
         }else{
-            System.out.println("Neuspesne stiahnutie detailu");
+            System.out.println("Error: Detail downloading failed.");
         }
-
     }
 
     private void Sell(String UID, int i) {
@@ -280,21 +243,17 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
         ArrayList<Game> games = new ArrayList<Game>();
         games = getDetail(UID);
         Game g = new Game();
-        System.out.println("V Sell() - ziskal som detail podla UID: " + UID);
-        System.out.println("Velkost Listu je: " + games.size());
         if(games.size() > 0) {
             g = games.get(0);
-            System.out.println("v Sell() idem poslat novy json");
             g.setCount(i);
             sendUpdate(g,UID);
         }else{
-            System.out.println("Neuspesne stiahnutie detailu");
+            System.out.println("Error: Detail downloading failed.");
         }
 
     }
 
     private ArrayList<Game> sendEdit(String ID) {
-        System.out.println("Intro - sendEdit for:"+ID);
         RadioGroup groupGenre = (RadioGroup) activity.findViewById(R.id.groupGenre);
         RadioGroup groupPlatform = (RadioGroup) activity.findViewById(R.id.groupPlatform);
 
@@ -333,8 +292,6 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
         g.setPlatform(PlatformID);
         g.setUID(detail_uid.getText().toString());
 
-        System.out.println("Ready to call sendUpdate for:"+ID);
-
         sendUpdate(g,ID);
         return null;
     }
@@ -342,63 +299,48 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
 
 
     public static void send(Socket sock,String event,JSONObject jObj,Ack ack){
-
         sock.emit(event, jObj, ack);
         synchronized(eventObj) {
-
-
             try {
                 eventObj.wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
         }
-
-
     }
 
     private void Delete(String UID) {
-        System.out.println("Idem vymazat zaznam s ID: "+ UID);
         if(mSocket == null){
             connect();
-            System.out.println("Pripojil som sa na socket server!");
         }
         JSONObject getQuery = new JSONObject();
-
         try {
-            System.out.println("Vytvaram Json s URL: " + SERVERNAME+"/"+UID);
             getQuery.put("url", SERVERNAME+"/"+UID);
         } catch (JSONException e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
-
         Ack ack = new Ack(){
             @Override
             public void call(Object... os) {
-                System.out.println("Prijal som ACK");
                 if (os[0] != null) {
                     JSONObject jsonAll = null;
                     try {
                         jsonAll = new JSONObject(os[0].toString());
                         int statusCode = jsonAll.getInt("statusCode");
                         if (statusCode != 200) {
-                            System.out.println("Chyba, neprijal som 200 OK, ale chybu: " + statusCode);
+                            System.out.println("Error:" + statusCode);
                             error = statusCode;
                         }
                     } catch (JSONException e) {
-                        e.printStackTrace();
+                        System.out.println(e);
                     }
                 }
                 synchronized(eventObj) {
-
                     eventObj.notifyAll();
-
                 }
             }
 
         };
-        System.out.println("Posielam DELETE s JSONOM: " + getQuery);
         send(mSocket, "delete", getQuery, ack);
     }
 
@@ -408,11 +350,7 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
         TextView detail_name = (TextView) activity.findViewById(R.id.edit_form_title);
 
         TextView detail_image = (TextView) activity.findViewById(R.id.edit_form_image);
-        //ExpandableListView detail_pegi = (ExpandableListView) activity.findViewById(R.id.edit_form_pegi_list);
         TextView detail_pegi =(TextView) activity.findViewById(R.id.edit_form_pegi);
-
-        //ImageView detail_image = (ImageView) activity.findViewById(R.id.edit_form_image);
-        // TextView detail_pegi = (TextView) activity.findViewById(R.id.edit_form_pegi_list);
 
         TextView detail_rating = (TextView) activity.findViewById(R.id.edit_form_rating);
         TextView detail_price = (TextView) activity.findViewById(R.id.edit_form_price);
@@ -440,7 +378,6 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
         RadioButton p4 = (RadioButton) activity.findViewById(R.id.radioButton6360);
         RadioButton p5 = (RadioButton) activity.findViewById(R.id.radioButton2_Wii);
 
-
         detail_name.setText(g.getName());
 
         detail_image.setText(g.getImage());
@@ -457,10 +394,8 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
         detail_producer.setText(g.getProducer());
         detail_language.setText(g.getLanguage());
 
-        System.out.println("Genre nastavujem na: "+g.getGenre());
         switch (g.getGenre()){
             case 0:
-                System.out.println("Nastavujem 0 - action");
                 g0.setChecked(true);
                 break;
             case 1:
@@ -516,18 +451,14 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
     private ArrayList<Game> getDetail(String UID) {
         // vracia instanciu triedy "Game" v ktorej su ulozene vsetky data stiahnute so servera
         // UID je ID stahovaneho zaznamu
-        System.out.println("GET DETAIL cez socket IO s id: " + UID);
-
         if(mSocket == null){
             connect();
-            System.out.println("Pripojil som sa na socket server!");
         }
         ArrayList<Game> GameList = new ArrayList<Game>();
         JSONObject getQuery = new JSONObject();
         final JSONObject[] data = new JSONObject[1];
 
         try {
-            System.out.println("Vytvaram Json s URL: " + SERVERNAME+"/"+UID);
             getQuery.put("url", SERVERNAME+"/"+UID);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -536,42 +467,31 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
         Ack ack = new Ack(){
             @Override
             public void call(Object... os) {
-                System.out.println("Prijal som ACK");
                 if (os[0] != null) {
-                    //System.out.println(os[0]);
                     JSONObject jsonAll = null;
                     try {
                         jsonAll = new JSONObject(os[0].toString());
                         int statusCode = jsonAll.getInt("statusCode");
                         if (statusCode != 200) {
-                            System.out.println("Chyba, neprijal som 200 OK, ale chybu: " + statusCode);
+                            System.out.println("Error: " + statusCode);
                             error = statusCode;
                         }
                         else {
-                            System.out.println("Prijal som data v poriadku");
                             data[0] = jsonAll.getJSONObject("body");
-                            System.out.println("Ulozil  som data do premennej data[0] vypis: \n" + data[0]);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
                 synchronized(eventObj) {
-
                     eventObj.notifyAll();
-
                 }
             }
         };
 
-        System.out.println("Posielam GET s JSONOM: " + getQuery);
         send(mSocket, "get", getQuery, ack);
-        System.out.println("Poslal som GET!");
         if (error == 0) {
-            System.out.println("Prijate data su: " +  data[0]);
-            System.out.println("Posielam prijate data do parseru");
             AllListBuilder(data[0].toString(), GameList);
-            System.out.println("Rozparsoval som data - velkost listu: "+ GameList.size());
             return GameList;
         }
         return null;
@@ -579,10 +499,8 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
 
 
     private  ArrayList<Game> getAll() {
-        System.out.println("Spustam getAll");
         if(mSocket == null){
             connect();
-            System.out.println("Pripojil som sa na socket server!");
         }
 
         ArrayList<Game> GameList = new ArrayList<Game>();
@@ -590,7 +508,6 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
         final JSONObject[] data = new JSONObject[1];
 
         try {
-            System.out.println("Vytvaram Json s URL: " + SERVERNAME);
             getQuery.put("url", SERVERNAME);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -599,7 +516,6 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
         Ack ack = new Ack(){
             @Override
             public void call(Object... os) {
-                System.out.println("Prijal som ACK");
                 if (os[0] != null) {
                     //System.out.println(os[0]);
                     JSONObject jsonAll = null;
@@ -607,42 +523,31 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
                         jsonAll = new JSONObject(os[0].toString());
                         int statusCode = jsonAll.getInt("statusCode");
                         if (statusCode != 200) {
-                            System.out.println("Chyba, neprijal som 200 OK, ale chybu: " + statusCode);
+                            System.out.println("Error: " + statusCode);
                             error = statusCode;
                         }
                         else {
-                            System.out.println("Prijal som data v poriadku");
                             data[0] = jsonAll.getJSONObject("body");
-                            System.out.println("Ulozil  som data do premennej data[0] vypis: \n" + data[0]);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
                 synchronized(eventObj) {
-
                     eventObj.notifyAll();
-
                 }
             }
         };
 
-        System.out.println("Posielam GET s JSONOM: " + getQuery);
         send(mSocket, "get", getQuery, ack);
-        System.out.println("Poslal som GET!");
         if (error == 0) {
-            System.out.println("Prijate data su: " +  data[0]);
-            System.out.println("Posielam prijate data do parseru");
             AllListBuilder(data[0].toString(), GameList);
-            System.out.println("Rozparsoval som data");
             return GameList;
         }
         return null;
     }
 
-
     private void connect(){
-        System.out.println("Spustam pripajanie na server");
         IO.Options opts = new IO.Options();
         opts.secure = false;
         opts.port = 1341;
@@ -658,19 +563,13 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
         mSocket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                System.out.println("--->>> CONNECT <<<---");
-                System.out.println("Pripojenie bolo uspesne!");
             }
 
         }).on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                System.out.println(args[0]);
-                System.out.println("--->>> DISCONNECT <<<---");
-                System.out.println("ODPOJENIE OD SERVERA!!!");
             }
         });
-        System.out.println("Koniec pripajania na server");
     }
 
     private void disconnect(){
@@ -679,13 +578,10 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
     }
 
     private void sendUpdate(Game g,String UID){
-        System.out.println("Sending update to:" +UID);
         try {
             //odosielanie
             if(mSocket == null){
-                System.out.println("Pripajam sa na socket server!");
                 connect();
-                System.out.println("Som pripojeny na socket server!");
             }
             JSONObject data = null;
             JSONObject jsObj = null;
@@ -693,34 +589,27 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
                 @Override
                 public void call(Object... os) { //funkcia volana po prijati potvrdenia
                     if (os[0] != null) {
-                        System.out.println(os[0]);
                         JSONObject json = null;
                         try {
                             json = new JSONObject(os[0].toString());
-                            System.out.println(json.getJSONObject("body"));
-
-                            if(json.getInt("statusCode")==200){
-                                System.out.println("ANSWER OK : "+json.getInt("statusCode"));
+                            if(json.getInt("statusCode")==200 && aktivita==4){//musim byt v Edit formulare
                                 activity.startActivity(new Intent(activity,MainActivity.class));
                                 activity.finish();
                             }
                             else{
-                                System.out.println("ANSWER WRONG: "+json.getInt("statusCode"));
+                                System.out.println("Error: "+json.getInt("statusCode"));
                             }
                         } catch (JSONException ex) {
                             System.out.println(ex);
                         }
                     }
                     synchronized(eventObj) {
-
                         eventObj.notifyAll();
-
                     }
                 }
             };
             data = new JSONObject();
             try {
-                System.out.println("building json");
                 //tu zostavím json
                 String json = "";
                 JSONObject jsonObject;
@@ -736,10 +625,9 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
                 data.put("price",g.getPrice());
                 data.put("name", g.getName());
                 data.put("genre",g.getGenre());
-                data.put("producer",g.getProducer());
+                data.put("producer", g.getProducer());
 
                 String printJSON = data.toString();
-                System.out.println(printJSON);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -757,39 +645,30 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            System.out.println("Odosielanie . . . JSON: " + jsPost);
-            mSocket.emit("put",jsPost,odpoved);
+            mSocket.emit("put", jsPost, odpoved);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
-
     }
-
 
     public ArrayList<Game> AllListBuilder(String JsonString,  ArrayList<Game> GameList){
         if(aktivita ==1){   // getAll() - pride velky json
             try {
                 JSONObject ParentObject = new JSONObject(JsonString);//mega json so všetkým, čo prišlo
                 JSONArray ParentArray = ParentObject.getJSONArray("data");//pole jsonov - vybrané len data bez headeru
-                System.out.println("Ciastocny parser vyparsoval array");
                 if (ParentArray != null)//všetky hry v JSONe pridá do zoznamu
                     for (int i=0;i<ParentArray.length();i++){
-                        System.out.println("parentArray[i]"+ParentArray.getJSONObject(i));
-
                         String id = ParentArray.getJSONObject(i).getString("id"); // id parsovaneho JSONU
                         JSONObject data = ParentArray.getJSONObject(i).getJSONObject("data");
-                        System.out.println("ID: " + id);
-                        System.out.println("Data ktore idem este parsovat: " + data);
                         GameList.add(ListParser(data, id, new Game()));
                     }
             }
             catch(Exception e)
             {
-                Log.d("JSON", "Toto je chyba s JSONOM:" + e.getMessage());//debug výpis
+                System.out.println("Error: List downloading failed.");
             }
             return GameList;
         }else if(aktivita == 2 || aktivita == 3 ||aktivita == 5||aktivita == 6){    // getDetail() - pride maly json alebo // getedit()
-            System.out.println("Parsujem pre aktivitu 2");
             JSONObject data= null;
             try {
 
@@ -801,22 +680,17 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
                     String id = ParentObject.getString("id");
                     System.out.println(ParentObject.toString());
                     GameList.add(ListParser(data, id, new Game()));
-
             }
             catch(Exception e)
             {
-                Log.d("JSON", "Toto je chyba s JSONOM:" + e.getMessage());//debug výpis
+                System.out.println("Error: List downloading failed.");
             }
             return GameList;
-
         }
-
         return GameList;
     }
 
     public Game ListParser(JSONObject JG,String id, Game SG){
-        System.out.println("Som v parsery");
-        System.out.println("Idem parsovat nasledujuce data:" + JG.toString());
         try {
             System.out.println("Som tu: NAME = " + JG.getString("name"));
             SG.setName(JG.getString("name"));
@@ -837,7 +711,7 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
             System.out.println("Idem vypisat SG");
             //SG.vypis();
         } catch (JSONException e) {
-            Log.d("JSON","Chyba pri parsovaní!");
+            System.out.println("Error: Parsing failed.");
         }
         return SG;
     }
@@ -861,9 +735,7 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
         viewGL.setAdapter(new CustomAdapter(activity, Names, Counts, Images, UIDs));
     }
     private Bitmap image(String link) {
-        System.out.println("Stary link: " + link);
         String newLink = link.replace("'\'","");
-        System.out.println("Novy link: "+ newLink);
         try {
             Bitmap bitmap = BitmapFactory.decodeStream((InputStream) new URL(newLink).getContent());
             return bitmap;
@@ -872,7 +744,6 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("ERROR : Vraciam null - stahovanie obrazku sa nepodarilo");
         return null;
     }
     protected void setDetail(Game g){
@@ -928,5 +799,4 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
         }
         detail_id.setText(g.getUID());
     }
-
 }

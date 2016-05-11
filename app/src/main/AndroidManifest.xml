@@ -17,18 +17,23 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Login">
+        <activity android:name=".Login"
+                  android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
-        <activity android:name=".detail" />
-        <activity android:name=".edit_form" />
-        <activity android:name=".image_detail"/>
-        <activity android:name=".add_form"/>
+        <activity android:name=".MainActivity"
+                  android:screenOrientation="portrait"/>
+        <activity android:name=".detail"
+                  android:screenOrientation="portrait"/>
+        <activity android:name=".edit_form"
+                  android:screenOrientation="portrait"/>
+        <activity android:name=".image_detail"
+                  android:screenOrientation="portrait"/>
+        <activity android:name=".add_form"
+                  android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

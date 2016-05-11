@@ -17,11 +17,9 @@ import android.widget.Toast;
 import java.net.InetAddress;
 
 public class Login extends AppCompatActivity {
+    private String USERNAME = "user";
+    private String PASSWORD = "password";
 
-    private String USERNAME = "";
-    private String PASSWORD = "";
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
@@ -34,30 +32,27 @@ public class Login extends AppCompatActivity {
     }
 
     public void testLogin(View view) {
-
         TextView Login = (TextView) findViewById(R.id.login_name);
         TextView Password = (TextView) findViewById(R.id.login_passwd);
+        if(isInternetOn()) {
+            if ((Login.getText().toString().equals(USERNAME)) && (Password.getText().toString().equals(PASSWORD))) {
+                Log.v("Login", "Login sucessful");
+                Logged();
+            } else {
+                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(this);
 
-        if ((Login.getText().toString().equals(USERNAME)) && (Password.getText().toString().equals(PASSWORD))) {
-            Log.v("Login", "Login sucessful");
-            //ProgressDialog Loading = ProgressDialog.show(Login.this, "", "Loading. Please wait...", true);
-            Logged();
-        } else {
-            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(this);
+                dlgAlert.setMessage("Wrong password or username");
+                dlgAlert.setTitle("Error!");
+                dlgAlert.setPositiveButton("OK", null);
+                dlgAlert.setCancelable(true);
+                dlgAlert.create().show();
 
-            dlgAlert.setMessage("Wrong password or username");
-            dlgAlert.setTitle("Error!");
-            dlgAlert.setPositiveButton("OK", null);
-            dlgAlert.setCancelable(true);
-            dlgAlert.create().show();
-
-            dlgAlert.setPositiveButton("Ok",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
-                    });
-
-
+                dlgAlert.setPositiveButton("Ok",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        });
+            }
         }
     }
 
@@ -77,7 +72,6 @@ public class Login extends AppCompatActivity {
 
             Toast.makeText(this, " Connected ", Toast.LENGTH_LONG).show();
             return true;
-
         } else if (
                 connec.getNetworkInfo(0).getState() == android.net.NetworkInfo.State.DISCONNECTED ||
                         connec.getNetworkInfo(1).getState() == android.net.NetworkInfo.State.DISCONNECTED  ) {

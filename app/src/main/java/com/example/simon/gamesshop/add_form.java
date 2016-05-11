@@ -35,22 +35,20 @@ import io.socket.emitter.Emitter;
 public class add_form extends AppCompatActivity {
     //vytvorenie activity
     protected void onCreate(Bundle savedInstanceState) {
-        System.out.println("Add form - onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_form);
         Intent myIntent = getIntent();
     }
 
     //hw tlacidlo vzad - vrati sa do main activity
-    public void onBackPressed()
-    {
+    public void onBackPressed() {
         super.onBackPressed();
         startActivity(new Intent(this, MainActivity.class));
         finish();
     }
 
     //nastavene na odosielacie tlacidlo
-    public void sendAdd(View view){
+    public void sendAdd(View view) {
         //priradenie elementov
         RadioGroup groupGenre = (RadioGroup) findViewById(R.id.add_form_groupGenre);
         RadioGroup groupPlatform = (RadioGroup) findViewById(R.id.add_form_groupPlatform);
@@ -63,7 +61,7 @@ public class add_form extends AppCompatActivity {
         TextView detail_description = (TextView) findViewById(R.id.add_form_decription);
         TextView detail_name = (TextView) findViewById(R.id.add_form_title);
         TextView detail_image = (TextView) findViewById(R.id.add_form_image);
-        TextView detail_pegi =(TextView) findViewById(R.id.add_form_pegi);
+        TextView detail_pegi = (TextView) findViewById(R.id.add_form_pegi);
         TextView detail_rating = (TextView) findViewById(R.id.add_form_rating);
         TextView detail_price = (TextView) findViewById(R.id.add_form_price);
         TextView detail_date = (TextView) findViewById(R.id.add_form_release);
@@ -74,29 +72,32 @@ public class add_form extends AppCompatActivity {
 
         //nastavenie aktualne pridavanej hry
         Game g = new Game();
-        g.setName(detail_name.getText().toString());
-        g.setDescription(detail_description.getText().toString());
-        g.setPegi(detail_pegi.getText().toString());
-        g.setRating(Integer.parseInt(detail_rating.getText().toString()));
-        g.setImage(detail_image.getText().toString());
-        g.setPrice(Integer.parseInt(detail_price.getText().toString()));
-        g.setReleaseDate(detail_date.getText().toString());
-        g.setCount(Integer.parseInt(detail_count.getText().toString()));
-        g.setProducer(detail_producer.getText().toString());
-        g.setLanguage(detail_language.getText().toString());
-        g.setGenre(GenreID);
-        g.setPlatform(PlatformID);
-        g.setUID(detail_uid.getText().toString());
-
+        try {
+            g.setName(detail_name.getText().toString());
+            g.setDescription(detail_description.getText().toString());
+            g.setPegi(detail_pegi.getText().toString());
+            g.setRating(Integer.parseInt(detail_rating.getText().toString()));
+            g.setImage(detail_image.getText().toString());
+            g.setPrice(Integer.parseInt(detail_price.getText().toString()));
+            g.setReleaseDate(detail_date.getText().toString());
+            g.setCount(Integer.parseInt(detail_count.getText().toString()));
+            g.setProducer(detail_producer.getText().toString());
+            g.setLanguage(detail_language.getText().toString());
+            g.setGenre(GenreID);
+            g.setPlatform(PlatformID);
+            g.setUID(detail_uid.getText().toString());
+        } catch (Exception e) {
+            System.out.println("Error: Fields are filled wrong!");
+        }
         //validacia, ci boli zadane vsetky data
-        if(isEmpty(g)){
+        if (isEmpty(g)) {
             //ak neboli zadane vsetky udaje, zobrazi sa upozornenie
             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(this);
-            dlgAlert.setMessage("Please fill all required fields!");
+            dlgAlert.setMessage("Fields are filled wrong!");
             dlgAlert.setTitle("Error!");
             dlgAlert.setCancelable(true);
             dlgAlert.create().show();
-        }else {
+        } else {
             //odoslanie IOConnectoru do pozadia
             IOConnector con = new IOConnector(this);
             con.execute("ADD");
@@ -105,9 +106,9 @@ public class add_form extends AppCompatActivity {
 
     //funkcia na kontrolu absencie udajov
     private boolean isEmpty(Game g) {
-        if(     g.getGenre() == -1 ||
+        if (g.getGenre() == -1 ||
                 g.getPlatform() == -1 ||
-                g.getCount() <0 ||
+                g.getCount() < 0 ||
                 g.getDescription().equals("") ||
                 g.getImage().equals("") ||
                 g.getLanguage().equals("") ||
@@ -116,9 +117,10 @@ public class add_form extends AppCompatActivity {
                 g.getPrice() < 0 ||
                 g.getReleaseDate().equals("") ||
                 g.getRating() < 0 ||
-                g.getProducer().equals("")){
-            return  true;
-        }else{
+                g.getRating() > 100 ||
+                g.getProducer().equals("")) {
+            return true;
+        } else {
             return false;
         }
     }

@@ -47,23 +47,9 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //GetAll();
-
         ListView listView = (ListView) findViewById(R.id.viewGL);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        //listView.setOnTouchListener(new ShowHideOnScroll(fab, R.anim.floating_action_button_show, R.anim.floating_action_button_hide));
         fab.setColor(R.color.colorAccent);
-
-        //fab.attachToListView(listView);
-        // fab.setType(FloatingActionButton.TYPE_MINI);
-        //fab.show(false);
-        //fab.hide(false);
-        //fab.setColorNormal(getResources().getColor(android.R.color.holo_red_light));
-        //fab.setColorPressed(getResources().getColor(android.R.color.white));
-        //fab.setShadow(true);
-        //fab.setColorRipple(getResources().getColor(R.color.material_blue_500));
-        // dorobit onclick listener
 
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this);
@@ -88,10 +74,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                     if (info[i].getState() == NetworkInfo.State.CONNECTED) {
                         return true;
                     }
-
         }
-        //return true;// zakomentovat
-        return true;    // opravit pred odovzdanim
+        return false;
     }
 
 

@@ -282,7 +282,7 @@
                 style="?android:attr/buttonStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Odoslať"
+                android:text="SEND"
                 android:id="@+id/add_form_sendbutton"
                 android:onClick="sendAdd" />
 
