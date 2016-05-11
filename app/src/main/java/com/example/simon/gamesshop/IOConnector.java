@@ -48,11 +48,13 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
     private String SERVERNAME = "/data/SS-JL-MTAA";
     private Socket mSocket = null;
     private AppCompatActivity activity;
+    private static int RECEIVETIME = 1000;
     String ID;
     private ProgressDialog Loading;
     public IOConnector(AppCompatActivity activity) {this.activity = activity;}
     private static final Object connectObj = new Object();
     private static final Object eventObj = new Object();
+
     private int error;
 
     @Override
@@ -199,6 +201,11 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
                             System.out.println(ex);
                         }
                     }
+                    synchronized(eventObj) {
+
+                        eventObj.notifyAll();
+
+                    }
                 }
             };
             data = new JSONObject();
@@ -336,16 +343,17 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
 
     public static void send(Socket sock,String event,JSONObject jObj,Ack ack){
 
-            sock.emit(event, jObj, ack);
+        sock.emit(event, jObj, ack);
+        synchronized(eventObj) {
 
 
-            synchronized(eventObj) {
-                try {
-                    eventObj.wait(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            try {
+                eventObj.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
+
+        }
 
 
     }
@@ -370,7 +378,6 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
             public void call(Object... os) {
                 System.out.println("Prijal som ACK");
                 if (os[0] != null) {
-                    //System.out.println(os[0]);
                     JSONObject jsonAll = null;
                     try {
                         jsonAll = new JSONObject(os[0].toString());
@@ -383,7 +390,13 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
                         e.printStackTrace();
                     }
                 }
+                synchronized(eventObj) {
+
+                    eventObj.notifyAll();
+
+                }
             }
+
         };
         System.out.println("Posielam DELETE s JSONOM: " + getQuery);
         send(mSocket, "delete", getQuery, ack);
@@ -543,7 +556,11 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
                         e.printStackTrace();
                     }
                 }
-                //openEvent();
+                synchronized(eventObj) {
+
+                    eventObj.notifyAll();
+
+                }
             }
         };
 
@@ -602,7 +619,11 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
                         e.printStackTrace();
                     }
                 }
-                //openEvent();
+                synchronized(eventObj) {
+
+                    eventObj.notifyAll();
+
+                }
             }
         };
 
@@ -637,11 +658,8 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
         mSocket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                //System.out.println(args[0]);
                 System.out.println("--->>> CONNECT <<<---");
                 System.out.println("Pripojenie bolo uspesne!");
-                //socket.emit("foo", "hi");
-                //socket.disconnect();
             }
 
         }).on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
@@ -693,6 +711,11 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
                             System.out.println(ex);
                         }
                     }
+                    synchronized(eventObj) {
+
+                        eventObj.notifyAll();
+
+                    }
                 }
             };
             data = new JSONObject();
@@ -739,6 +762,7 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
 
@@ -837,9 +861,9 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
         viewGL.setAdapter(new CustomAdapter(activity, Names, Counts, Images, UIDs));
     }
     private Bitmap image(String link) {
-        //System.out.println("Stary link: " + link);
+        System.out.println("Stary link: " + link);
         String newLink = link.replace("'\'","");
-        //System.out.println("Novy link: "+ newLink);
+        System.out.println("Novy link: "+ newLink);
         try {
             Bitmap bitmap = BitmapFactory.decodeStream((InputStream) new URL(newLink).getContent());
             return bitmap;
