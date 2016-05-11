@@ -100,7 +100,7 @@ public class detail extends AppCompatActivity {
 
         System.out.println("DETAILBUY:ID:" + ID + "  Count:" + count);
 
-        Connector con = new Connector(this);
+        IOConnector con = new IOConnector(this);
         con.execute("BUY", ID, count);
 
         int incremented = Integer.parseInt(count);
@@ -137,7 +137,7 @@ public class detail extends AppCompatActivity {
         int control = Integer.parseInt(count);
         if (control > 0) {
 
-            Connector con = new Connector(this);
+            IOConnector con = new IOConnector(this);
             con.execute("SELL", ID, count);
 
             int decremented = Integer.parseInt(count);
@@ -167,7 +167,7 @@ public class detail extends AppCompatActivity {
         TextView idView = (TextView) findViewById(R.id.detail_id);
         String ID = idView.getText().toString();
         System.out.println("DETAILDEL:ID:" + ID);
-        Connector con = new Connector(this);
+        IOConnector con = new IOConnector(this);
         con.execute("DEL", ID);
         onBackPressed();
     }
