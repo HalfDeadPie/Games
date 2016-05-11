@@ -87,6 +87,7 @@ public class edit_form extends AppCompatActivity {
             TextView idView = (TextView) findViewById(R.id.edit_form_uid);
 
             String id = idView.getText().toString();
+            System.out.println("SENDING EDIT:"+id);
             con.execute("SENDEDIT", id);
         }
 

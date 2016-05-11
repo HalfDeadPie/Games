@@ -49,7 +49,9 @@ public class add_form extends AppCompatActivity {
         finish();
     }
 
+    //nastavene na odosielacie tlacidlo
     public void sendAdd(View view){
+        //priradenie elementov
         RadioGroup groupGenre = (RadioGroup) findViewById(R.id.add_form_groupGenre);
         RadioGroup groupPlatform = (RadioGroup) findViewById(R.id.add_form_groupPlatform);
         int radioButtonID = groupGenre.getCheckedRadioButtonId();
@@ -70,6 +72,7 @@ public class add_form extends AppCompatActivity {
         TextView detail_language = (TextView) findViewById(R.id.add_form_languages);
         TextView detail_uid = (TextView) findViewById(R.id.add_form_uid);
 
+        //nastavenie aktualne pridavanej hry
         Game g = new Game();
         g.setName(detail_name.getText().toString());
         g.setDescription(detail_description.getText().toString());
@@ -85,36 +88,22 @@ public class add_form extends AppCompatActivity {
         g.setPlatform(PlatformID);
         g.setUID(detail_uid.getText().toString());
 
-        //vypis na debuggovanie
-        System.out.println("ADDING GAME:");
-        System.out.println(g.getName());
-        System.out.println(g.getDescription());
-        System.out.println(g.getPegi());
-        System.out.println(g.getRating());
-        System.out.println(g.getImage());
-        System.out.println(g.getPrice());
-        System.out.println(g.getReleaseDate());
-        System.out.println(g.getCount());
-        System.out.println(g.getProducer());
-        System.out.println(g.getLanguage());
-        System.out.println(g.getGenre());
-        System.out.println(g.getPlatform());
-        System.out.println(g.getUID());
-
-
+        //validacia, ci boli zadane vsetky data
         if(isEmpty(g)){
+            //ak neboli zadane vsetky udaje, zobrazi sa upozornenie
             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(this);
             dlgAlert.setMessage("Please fill all required fields!");
             dlgAlert.setTitle("Error!");
             dlgAlert.setCancelable(true);
             dlgAlert.create().show();
         }else {
+            //odoslanie IOConnectoru do pozadia
             IOConnector con = new IOConnector(this);
             con.execute("ADD");
         }
     }
 
-
+    //funkcia na kontrolu absencie udajov
     private boolean isEmpty(Game g) {
         if(     g.getGenre() == -1 ||
                 g.getPlatform() == -1 ||

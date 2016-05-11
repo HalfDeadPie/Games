@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 public class detail extends AppCompatActivity {
-    @Override
+    //vytvorenie activity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
@@ -41,7 +41,7 @@ public class detail extends AppCompatActivity {
         GetDetail(gameId);
     }
 
-    @Override
+    //hw tlacidlo vzad
     public void onBackPressed()
     {
         ProgressDialog Loading = ProgressDialog.show(detail.this, "", "Loading. Please wait...", true);
@@ -50,12 +50,13 @@ public class detail extends AppCompatActivity {
         finish();
     }
 
+    //hlavna funkcia, ktora je nastavena na prislusne tlacidla
     public void GetDetail(String ID) {
         IOConnector con = new IOConnector(this);
-        //System.out.println(ID);
-        con.execute("GETDETAIL", ID);
+        con.execute("GETDETAIL", ID);//odoslanie IOConnectoru s ID, ktore je na obrazovke skryte
     }
 
+    //funkcia na ziskanie Bitmapy pomocou URL
     protected Bitmap getImage(String link) {
         Bitmap b = null;
         AsyncTask<String, String, Bitmap> img = new Image();
@@ -70,6 +71,7 @@ public class detail extends AppCompatActivity {
         return null;
     }
 
+    //list parser
     public Game ListParser(JSONObject JG, Game SG) {
         try {
             SG.setName(JG.getString("name"));
@@ -100,7 +102,7 @@ public class detail extends AppCompatActivity {
 
         System.out.println("DETAILBUY:ID:" + ID + "  Count:" + count);
 
-        Connector con = new Connector(this);
+        IOConnector con = new IOConnector(this);
         con.execute("BUY", ID, count);
 
         int incremented = Integer.parseInt(count);
@@ -137,7 +139,7 @@ public class detail extends AppCompatActivity {
         int control = Integer.parseInt(count);
         if (control > 0) {
 
-            Connector con = new Connector(this);
+            IOConnector con = new IOConnector(this);
             con.execute("SELL", ID, count);
 
             int decremented = Integer.parseInt(count);
@@ -167,7 +169,7 @@ public class detail extends AppCompatActivity {
         TextView idView = (TextView) findViewById(R.id.detail_id);
         String ID = idView.getText().toString();
         System.out.println("DETAILDEL:ID:" + ID);
-        Connector con = new Connector(this);
+        IOConnector con = new IOConnector(this);
         con.execute("DEL", ID);
         onBackPressed();
     }
