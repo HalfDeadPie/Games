@@ -138,7 +138,6 @@ public class detail extends AppCompatActivity {
 
         int control = Integer.parseInt(count);
         if (control > 0) {
-
             IOConnector con = new IOConnector(this);
             con.execute("SELL", ID, count);
 

@@ -12,16 +12,16 @@ import android.widget.TextView;
 
 public class edit_form extends AppCompatActivity {
 
-    @Override
+    //vytvorenie activity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_form);
-
         Intent myIntent = getIntent();
         String gameId = myIntent.getStringExtra("ID");
         GetEdit(gameId);
     }
 
+    //hlavna funkcia, na ktoru odkazuje tlacidlo
     private void GetEdit(String id) {
         IOConnector con = new IOConnector(this);
         con.execute("GETEDIT", id);
@@ -35,7 +35,7 @@ public class edit_form extends AppCompatActivity {
         startActivity(new Intent(this, MainActivity.class));
         finish();
     }
-
+    //hlavna funkcia na odoslanie pomocou tlacidla
     public void sendEdit(View view){
         RadioGroup groupGenre = (RadioGroup) findViewById(R.id.groupGenre);
         RadioGroup groupPlatform = (RadioGroup) findViewById(R.id.groupPlatform);
@@ -92,6 +92,8 @@ public class edit_form extends AppCompatActivity {
         }
 
     }
+
+    //kontrola a ciastocna validacia dat
     private boolean isEmpty(Game g) {
         if(     g.getGenre() == -1 ||
                 g.getPlatform() == -1 ||
