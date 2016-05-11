@@ -385,10 +385,8 @@ public class IOConnector extends AsyncTask<String, String, ArrayList<Game>> {
                 }
             }
         };
-
         System.out.println("Posielam DELETE s JSONOM: " + getQuery);
         send(mSocket, "delete", getQuery, ack);
-
     }
 
     //nastavenie formularu na upravu hry
