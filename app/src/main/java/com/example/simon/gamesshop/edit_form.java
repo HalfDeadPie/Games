@@ -23,8 +23,7 @@ public class edit_form extends AppCompatActivity {
     }
 
     private void GetEdit(String id) {
-        Connector con = new Connector(this);
-        //System.out.println(ID);
+        IOConnector con = new IOConnector(this);
         con.execute("GETEDIT", id);
     }
 
@@ -38,9 +37,6 @@ public class edit_form extends AppCompatActivity {
     }
 
     public void sendEdit(View view){
-
-
-
         RadioGroup groupGenre = (RadioGroup) findViewById(R.id.groupGenre);
         RadioGroup groupPlatform = (RadioGroup) findViewById(R.id.groupPlatform);
 
@@ -51,8 +47,6 @@ public class edit_form extends AppCompatActivity {
         int radioButtonIDP = groupPlatform.getCheckedRadioButtonId();
         View radioButtonP = groupPlatform.findViewById(radioButtonIDP);
         int PlatformID = groupPlatform.indexOfChild(radioButtonP);  // cislo platformy
-
-
 
         TextView detail_description = (TextView) findViewById(R.id.edit_form_decription);
         TextView detail_name = (TextView) findViewById(R.id.edit_form_title);
@@ -65,7 +59,6 @@ public class edit_form extends AppCompatActivity {
         TextView detail_producer = (TextView) findViewById(R.id.edit_form_producer);
         TextView detail_language = (TextView) findViewById(R.id.edit_form_languages);
         TextView detail_uid = (TextView) findViewById(R.id.edit_form_uid);
-
 
         Game g = new Game();
         g.setName(detail_name.getText().toString());
@@ -90,7 +83,7 @@ public class edit_form extends AppCompatActivity {
             dlgAlert.create().show();
         }else {
 
-            Connector con = new Connector(this);
+            IOConnector con = new IOConnector(this);
             TextView idView = (TextView) findViewById(R.id.edit_form_uid);
 
             String id = idView.getText().toString();
@@ -98,8 +91,6 @@ public class edit_form extends AppCompatActivity {
         }
 
     }
-
-
     private boolean isEmpty(Game g) {
         if(     g.getGenre() == -1 ||
                 g.getPlatform() == -1 ||
