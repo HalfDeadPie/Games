@@ -270,7 +270,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         TextView textView2 = (TextView) row2.findViewById(R.id.count);
         String count = textView2.getText().toString();
 
-        Connector con = new Connector(this);
+        IOConnector con = new IOConnector(this);
         con.execute("BUY", ID, count);
 
         int incremented = Integer.parseInt(count);
@@ -297,7 +297,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         int control = Integer.parseInt(count);
         if (control > 0) {
 
-            Connector con = new Connector(this);
+            IOConnector con = new IOConnector(this);
             con.execute("SELL", ID, count);
 
             int decremented = Integer.parseInt(count);
